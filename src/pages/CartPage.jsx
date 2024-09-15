@@ -43,6 +43,7 @@ export const CartPage = () => {
         }
       );
       let data = await res.json();
+      console.log(data);
       window.location.replace(data.url);
     } catch (error) {
       console.log(error);
@@ -129,7 +130,7 @@ export const CartPage = () => {
               </div>
             )}
             {cart?.length ? (
-              <div className="mt-4 w-100">
+              <div className="my-4 w-100">
                 <button onClick={checkout} className="btn btn-danger w-100">
                   Check out
                 </button>
