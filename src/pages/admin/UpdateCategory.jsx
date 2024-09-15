@@ -8,7 +8,7 @@ const UpdateCategory = ({ selectedCat, setSelectedCat }) => {
   const [inputVal, setInputVal] = useState({ name: "" });
   const [trix, setTrix] = useState(true);
   let { token, getCategory } = useAuth();
-
+  
   // eslint-disable-next-line react/prop-types
   if (selectedCat?.cat?.name && trix) {
     // eslint-disable-next-line react/prop-types
@@ -99,7 +99,7 @@ const UpdateCategory = ({ selectedCat, setSelectedCat }) => {
                       className=" form-control m-2"
                       type="text"
                       name="name"
-                      value={inputVal.name}
+                      value={inputVal?.name}
                       placeholder="Enter category name"
                     />
 

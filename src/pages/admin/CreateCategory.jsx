@@ -1,5 +1,5 @@
 import AdminMenu from "./AdminMenu";
-import UpdateCategory from "./updateCategory";
+import UpdateCategory from "./UpdateCategory";
 import { useAuth } from "../../context/AuthContext";
 import CategoryTable from "../../components/CategoryTable";
 import { toast } from "react-toastify";
