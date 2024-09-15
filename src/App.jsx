@@ -5,7 +5,7 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Home from "./pages/Home";
+// import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Contacts from "./pages/Contacts";
@@ -17,11 +17,11 @@ import { Private } from "./components/routes/Private";
 import ForgotPassword from "./pages/ForgotPassword";
 import { AdminAuth } from "./components/routes/AdminAuth";
 import AdminPanel from "./pages/admin/AdminPanel";
-import CreateCategory from "./pages/admin/CreateCategory";
+// import CreateCategory from "./pages/admin/CreateCategory";
 // import CreateProduct from "./pages/admin/CreateProduct";
 import UserList from "./pages/admin/UserList";
 import Profile from "./pages/user/Profile";
-import Orders from "./pages/user/Orders";
+// import Orders from "./pages/user/Orders";
 import ProductInput from "./pages/admin/ProductInput";
 import SearchResults from "./components/SearchResults";
 import MoreInfo from "./components/MoreInfo";
@@ -31,11 +31,14 @@ import AdminProfile from "./pages/admin/AdminProfile";
 import { lazy, Suspense } from "react";
 import PaymentSuccess from "./components/PaymentSuccess";
 import PaymentFail from "./components/PaymentFail";
-import AdminOrders from "./pages/admin/AdminOrders";
+// import AdminOrders from "./pages/admin/AdminOrders";
 import Layout from "./components/Layout";
 
 // let CreateProduct= lazy(()=>import('./pages/admin/CreateProduct'))
-// let About = lazy(() => import('./pages/About'))
+let CreateCategory= lazy(()=>import('./pages/admin/CreateCategory'))
+let Home = lazy(() => import('./pages/Home'))
+let AdminOrders = lazy(() => import("./pages/admin/AdminOrders"));
+let Orders = lazy(() => import("./pages/user/Orders"));
 let About = lazy(() => wait(1).then(() => import("./pages/About")));
 let CreateProduct = lazy(() =>
   wait(1).then(() => import("./pages/admin/CreateProduct"))
