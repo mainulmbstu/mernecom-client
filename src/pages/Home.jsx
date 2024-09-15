@@ -204,7 +204,7 @@ const Home = () => {
         
           <h3>{!checkedCat.length ? "All Products" : "Products by category"}</h3>
           {
-            loading && <h1> Loading...</h1>
+            loadingHome && <h1> Loading...</h1>
           }
           <h3 className=" text-danger">
             
