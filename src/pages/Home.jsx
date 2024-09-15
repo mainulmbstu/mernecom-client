@@ -11,7 +11,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Home = () => {
   let { category, } = useStore();
-  let { products, setProducts, page, setPage } = useAuth();
+  let { products, setProducts, page, setPage, loadingHome } = useAuth();
   let {cart, setCart } = useSearch();
 
   // let cat = () => {};
@@ -202,8 +202,12 @@ const Home = () => {
 
       <div className="col-md-10">
         
-        <h3>{!checkedCat.length ? "All Products" : "Products by category"}</h3>
-        <h3 className=" text-danger">
+          <h3>{!checkedCat.length ? "All Products" : "Products by category"}</h3>
+          {
+            loading && <h1> Loading...</h1>
+          }
+          <h3 className=" text-danger">
+            
           {!products?.length ? "No Product Found!!" : ""}
         </h3>
         <div className="row g-3">

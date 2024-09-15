@@ -46,10 +46,13 @@ const AuthContextProvider = ({ children }) => {
   //==============================================================
   //========== all products ==================
   const [products, setProducts] = useState([]);
-    const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const [loadingHome, setLoadingHome] = useState(false);
+  
 // console.log(products);
   let getProducts = async () => {
     try {
+      setLoadingHome(true);
       let res = await fetch(
         `${import.meta.env.VITE_BASE_URL}/products/product-list-per-page/${page}`,
         {
@@ -58,6 +61,7 @@ const AuthContextProvider = ({ children }) => {
       );
       let data = await res.json();
       setProducts(data.products);
+      setLoadingHome(false);
     } catch (error) {
       console.log(error);
     }
@@ -90,6 +94,7 @@ const AuthContextProvider = ({ children }) => {
         setEditData,
         page,
         setPage,
+        loadingHome,
       }}
     >
       {children}

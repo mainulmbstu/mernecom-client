@@ -13,7 +13,7 @@ const MoreInfo = () => {
   let getMoreInfo = async () => {
     try {
       let res = await fetch(
-        `http://localhost:8000/products/more-info/${params.pid}`,
+        `${import.meta.env.VITE_BASE_URL}/products/more-info/${params.pid}`,
         {
           method: "GET",
         }
