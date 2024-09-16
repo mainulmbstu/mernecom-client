@@ -8,15 +8,19 @@ export const CartPage = () => {
   let { cart, setCart } = useSearch();
   let navigate = useNavigate();
 
-  let totalPrice = () => {
-    try {
-      let total = 0;
-      cart?.length && cart?.map((item) => (total += item?.price));
-      return total;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // let totalPrice = () => {
+  //   try {
+  //     let total = 0;
+  //     cart?.length && cart?.map((item) => (total += item?.price));
+  //     return total;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+let total=cart?.length && cart?.reduce((previous, current) => {
+  return previous + current.price
+}, 0);
 
   let removeCartItem = (id) => {
     try {
@@ -105,7 +109,7 @@ export const CartPage = () => {
             <h4>Cart Summary</h4>
             <p>Total|| Checkout|| Payment</p>
             <hr />
-            <h3>Total: BDT {totalPrice()}</h3>
+            <h3>Total: BDT {total}</h3>
             <hr />
             {userInfo?.address ? (
               <>
@@ -128,7 +132,7 @@ export const CartPage = () => {
                 </button>
               </div>
             )}
-            {cart?.length ? (
+            {cart?.length && token ? (
               <div className="my-4 w-100">
                 <button onClick={checkout} className="btn btn-danger w-100">
                   Check out

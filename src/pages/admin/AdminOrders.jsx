@@ -71,6 +71,10 @@ const AdminOrders = () => {
     }
   };
 
+  let totalPrice= adminOrders?.length && adminOrders?.reduce((previous, current) => {
+    return previous + current.total
+  }, 0);
+//===============================================================
   return (
     <Layout title={"Admin orders"}>
       <div className="row ">
@@ -81,81 +85,86 @@ const AdminOrders = () => {
         </div>
         <div className=" col-sm-9 p-2">
           <div className=" card p-2 text-center">
-            <h2>All orders ({adminOrders?.length}) </h2>
+            <h2>Total Orders: ({adminOrders?.length}) </h2>
+            <h2> Total Sale: BDT {totalPrice} </h2>
           </div>
 
           <div className="row ">
             {loading && <Loading />}
 
-            {adminOrders.length && adminOrders?.map((item, i) => {
-              return (
-                <div key={item._id} className=" mt-5 shadow">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">User-email</th>
-                        <th scope="col">User-Address</th>
-                        <th scope="col">Payment</th>
-                        <th scope="col">Qnty</th>
-                        <th scope="col">Total Price</th>
-                        <th scope="col">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{i + 1} </td>
-                        <td>
-                          <Select
-                            variant={false}
-                            defaultValue={item?.status}
-                            onChange={(val) => statusHandle(item._id, val)}
-                          >
-                            {status.map((st, i) => (
-                              <Option key={i} value={st}>
-                                {st}{" "}
-                              </Option>
-                            ))}
-                          </Select>
-                        </td>
+            {adminOrders.length &&
+              adminOrders?.map((item, i) => {
+                return (
+                  <div key={item._id} className=" mt-5 shadow">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">User-email</th>
+                          <th scope="col">User-Address</th>
+                          <th scope="col">Payment</th>
+                          <th scope="col">Qnty</th>
+                          <th scope="col">Total Price</th>
+                          <th scope="col">Time</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{i + 1} </td>
+                          <td>
+                            <Select
+                              variant={false}
+                              defaultValue={item?.status}
+                              onChange={(val) => statusHandle(item._id, val)}
+                            >
+                              {status.map((st, i) => (
+                                <Option key={i} value={st}>
+                                  {st}{" "}
+                                </Option>
+                              ))}
+                            </Select>
+                          </td>
 
-                        <td>{item?.user?.email} </td>
-                        <td>{item?.user?.address} </td>
-                        <td>{item?.payment?.status ? "Success" : "Failed"} </td>
-                        <td>{item?.products?.length} </td>
-                        <td>{item?.total} </td>
-                        <td>{moment(item?.createdAt).fromNow()} </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  {item?.products?.length && item?.products?.map((p, i) => {
-                    return (
-                      <div key={i} className="row g-5">
-                        <div className="row g-4">
-                          <div className=" col-4">
-                            <img
-                              src={`${p?.picture?.secure_url}`}
-                              className=" ms-3"
-                              width={100}
-                              height={100}
-                              alt="image"
-                            />
-                          </div>
-                          <div className=" col-8 d-flex flex-column">
-                            <div>
-                              <h5>Name: {p?.name} </h5>
-                              <p>Category: {p?.category?.name} </p>
-                              <p>Price: {p?.price} </p>
+                          <td>{item?.user?.email} </td>
+                          <td>{item?.user?.address} </td>
+                          <td>
+                            {item?.payment?.status ? "Success" : "Failed"}{" "}
+                          </td>
+                          <td>{item?.products?.length} </td>
+                          <td>{item?.total} </td>
+                          <td>{moment(item?.createdAt).fromNow()} </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    {item?.products?.length &&
+                      item?.products?.map((p, i) => {
+                        return (
+                          <div key={i} className="row g-5">
+                            <div className="row g-4">
+                              <div className=" col-4">
+                                <img
+                                  src={`${p?.picture?.secure_url}`}
+                                  className=" ms-3"
+                                  width={100}
+                                  height={100}
+                                  alt="image"
+                                />
+                              </div>
+                              <div className=" col-8 d-flex flex-column">
+                                <div>
+                                  <h5>Name: {p?.name} </h5>
+                                  <p>Category: {p?.category?.name} </p>
+                                  <p>Price: {p?.price} </p>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
+                        );
+                      })}
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>
