@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
+    const [showpass, setShowPass] = useState(false);
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -56,8 +58,8 @@ const Register = () => {
   return (
     <Layout title={"register"}>
       <div className=" d-flex justify-content-around my-auto ">
-        <div className=" w-50 text-center shadow">
-          <h2>Registration form</h2>
+        <div className="text-center shadow pe-3 pb-2">
+          <h2 className=" text-uppercase ps-3">Registration form</h2>
           <form onSubmit={submitted} action="">
             <input
               onChange={inputHandle}
@@ -77,16 +79,27 @@ const Register = () => {
               placeholder="email"
               required
             />
-            <label title={hints}> Password hints:</label>
-            <input
-              onChange={inputHandle}
-              className=" form-control m-2"
-              type="password"
-              name="password"
-              value={user.password}
-              placeholder="password"
-              required
-            />
+            <div className=" ms-2 text-start"><label className="" title={hints}> Password hints:</label></div>
+            <div className=" position-relative">
+              <input
+                onChange={inputHandle}
+                className=" form-control m-2 "
+                type={showpass ? "text" : "password"}
+                name="password"
+                value={user.password}
+                placeholder="password"
+                required
+              />
+              <div className=" position-absolute">
+                <Link onClick={() => setShowPass((prev) => !prev)}>
+                  {showpass ? (
+                    <FaEyeSlash className=" fs-2" />
+                  ) : (
+                    <FaEye className=" fs-2" />
+                  )}
+                </Link>
+              </div>
+            </div>
             <input
               onChange={inputHandle}
               className=" form-control m-2"

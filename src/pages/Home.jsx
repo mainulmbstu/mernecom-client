@@ -9,6 +9,7 @@ import Layout from "../components/Layout";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import Loading from "../components/Loading";
+import Marquee from "react-fast-marquee";
 
 const Home = () => {
   let { category, } = useStore();
@@ -108,6 +109,11 @@ const Home = () => {
 
   return (
     <Layout title={"home"}>
+      <div className=" hero-area text-danger">
+        <Marquee direction="left" speed={300} autofill={false} loop={''}>
+          <h1 >WELCOME TO DEMO ECOMMERCE WEBSITE ||   </h1>
+        </Marquee>
+      </div>
       <div className="row px-md-4">
         <div className="col-md-2">
           <h5>Category</h5>

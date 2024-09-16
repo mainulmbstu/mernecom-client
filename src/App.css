@@ -70,3 +70,25 @@
     rgb(240, 241, 248)
   );
 }
+
+.position-absolute{
+  right:0;
+  top: 4px;
+}
+
+.hero-area{
+  background-color: black;
+  height: 300px;
+  display: flex;
+  font-style: italic;
+  font-size: larger;
+}
+
+.hero-area h1{
+  font-size: 50px;
+}
+  
+
+
+
+

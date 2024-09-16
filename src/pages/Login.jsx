@@ -43,35 +43,37 @@ const Login = () => {
   return (
     <Layout title={"Login"}>
       <div className=" d-flex justify-content-center my-auto">
-        <div className=" w-50 text-center shadow p-5">
-          <h2>Login form</h2>
+        <div className=" text-center shadow py-5 pe-3">
+          <h2>LOGIN FORM</h2>
           <form onSubmit={submitted} action="">
             <input
               onChange={inputHandle}
-              className=" form-control m-2"
+              className=" form-control m-2 border-0 border-bottom border-black rounded-0"
               type="email"
               name="email"
               value={user.email}
               placeholder="email"
               required
             />
-            <div className=" d-flex">
+            <div className=" position-relative">
               <input
                 onChange={inputHandle}
-                className=" form-control m-2"
+                className="form-control m-2 border-0 border-bottom border-black rounded-0"
                 type={showpass ? "text" : "password"}
                 name="password"
                 value={user.password}
                 placeholder="password"
                 required
               />
-              <Link onClick={() => setShowPass((prev) => !prev)}>
-                {showpass ? (
-                  <FaEyeSlash className=" fs-2" />
-                ) : (
-                  <FaEye className=" fs-2" />
-                )}
-              </Link>
+              <div className=" position-absolute">
+                <Link onClick={() => setShowPass((prev) => !prev)}>
+                  {showpass ? (
+                    <FaEyeSlash className=" fs-2" />
+                  ) : (
+                    <FaEye className=" fs-2" />
+                  )}
+                </Link>
+              </div>
             </div>
 
             <button

@@ -5,6 +5,7 @@ import moment from "moment";
 import { Select } from "antd";
 import Layout from "../../components/Layout";
 let { Option } = Select;
+import Loading from "./../../components/Loading";
 
 const AdminOrders = () => {
   let [adminOrders, setAdminOrders] = useState([]);
@@ -15,37 +16,27 @@ const AdminOrders = () => {
     "delivered",
     "cancel",
   ]);
-  let [okdel, setOkdel] = useState(true);
-  let [changeStatus, setChangeStatus] = useState("");
+  let [loading, setLoading] = useState(false);
   let { token, userInfo } = useAuth();
-  //   let roleHandle = async (value, id) => {
-  //     if (id === userInfo._id) {
-  //       return alert("You cannot update yourself");
-  //     }
-  //     let res = await fetch(`http://localhost:8000/admin/user/status/${id}`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify({ role: value }),
-  //     });
-  //     let data = await res.json();
-  //     setOkdel((prev) => !prev);
-  //     await alert(data.msg);
-  //   };
 
+    let getAdminOrders = async () => {
+      try {
+        setLoading(true);
+         let res= await fetch(`${import.meta.env.VITE_BASE_URL}/admin/order-list`, {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          let data = await res.json()
+          setAdminOrders(data.orderList);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+console.log(loading);
   useEffect(() => {
-    if (token && userInfo.role) {
-      fetch(`${import.meta.env.VITE_BASE_URL}/admin/order-list`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => res.json())
-        .then((data) => setAdminOrders(data.orderList))
-        .catch((error) => console.log(error));
-    }
-  }, [token, okdel, userInfo.role]);
+   if (token && userInfo.role) getAdminOrders();
+  }, [token, userInfo.role]);
 
   //   let deletefn = async (id) => {
   //     if (id === userInfo._id) {
@@ -84,7 +75,7 @@ const AdminOrders = () => {
     <Layout title={"Admin orders"}>
       <div className="row ">
         <div className="col-md-3 p-2">
-          <div className="card p-2">
+          <div className="card p-2  sticky-top z-0">
             <AdminMenu />
           </div>
         </div>
@@ -94,6 +85,7 @@ const AdminOrders = () => {
           </div>
 
           <div className="row ">
+            {loading && <Loading />}
             {adminOrders?.map((item, i) => {
               return (
                 <div key={item._id} className=" mt-5 shadow">
