@@ -46,7 +46,7 @@ const CreateProduct = () => {
           <div className=" card p-2">
             <div className="">
               <div className=" d-flex justify-content-between mb-3">
-                <h3>Product List ({products.length}) </h3>
+                <h3>Product List ({products?.length}) </h3>
 
                 <div>
                   <button
@@ -74,7 +74,7 @@ const CreateProduct = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {products?.length > 0 &&
+                    {products?.length &&
                       products.map((item, index) => {
                         return (
                           <tr key={item._id}>

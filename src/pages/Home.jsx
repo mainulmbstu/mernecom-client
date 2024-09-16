@@ -118,12 +118,12 @@ const Home = () => {
         <div className="col-md-2">
           <h5>Category</h5>
           <div className=" d-flex flex-column">
-            {category.map((item) => (
+            {category?.length && category?.map((item) => (
               <Checkbox
-                key={item._id}
+                key={item?._id}
                 onChange={(e) => catHandle(e.target.checked, item._id)}
               >
-                {item.name}
+                {item?.name}
               </Checkbox>
             ))}
 
@@ -216,9 +216,9 @@ const Home = () => {
             {!products?.length ? "No Product Found!!" : ""}
           </h3>
           <div className="row g-3">
-            {products?.map((item) => {
+            {products?.length && products?.map((item) => {
               return (
-                <div key={item._id} className="col-md-3  ">
+                <div key={item?._id} className="col-md-3  ">
                   <div className="card h-100">
                     <LazyLoadImage
                       src={`${item?.picture?.secure_url}`}
@@ -227,15 +227,15 @@ const Home = () => {
                       alt="image"
                     />
                     <div className="card-body">
-                      <h5 className="card-title">{item.name}</h5>
+                      <h5 className="card-title">{item?.name}</h5>
                       <div className="card-text">
                         <p className="m-0">Category: {item?.category?.name} </p>
-                        <p className="m-0">Price: {item.price} </p>
+                        <p className="m-0">Price: {item?.price} </p>
                         <p className="m-0">
-                          Available quantity: {item.quantity}{" "}
+                          Available quantity: {item?.quantity}
                         </p>
                         <p className="m-0">
-                          Description: {item.description.substring(0, 8)} ....{" "}
+                          Description: {item?.description.substring(0, 8)} ....
                         </p>
                       </div>
                     </div>
@@ -269,7 +269,7 @@ const Home = () => {
           </div>
         </div>
         <div className="m-3 d-flex justify-content-center">
-          {products && products.length < total && (
+          {products && products?.length < total && (
             <button
               onClick={(e) => {
                 e.preventDefault();

@@ -32,13 +32,13 @@ const Category = () => {
       <div>
         <div className="">
           <h3 className=" text-capitalize">
-            Category: {params.slug}({products?.length}){" "}
+            Category: {params.slug}({products?.length})
           </h3>
           <h3 className=" text-danger">
             {!products?.length ? "No Product Found!!" : ""}
           </h3>
           <div className="row g-3">
-            {products?.map((item) => {
+             {products?.length && products?.map((item) => {
               return (
                 <div key={item._id} className="col-md-3  ">
                   <div className="card h-100">

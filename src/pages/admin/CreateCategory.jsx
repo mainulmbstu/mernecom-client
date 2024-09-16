@@ -45,7 +45,7 @@ const CreateCategory = () => {
               <CategoryTable />
             </div>
             <div>
-              <h3>Category List ({category.length}) </h3>
+              <h3>Category List ({category?.length}) </h3>
               <div className=" border">
                 <table className="table table-hover">
                   <thead>
@@ -58,7 +58,7 @@ const CreateCategory = () => {
                     </tr>
                   </thead>
                   <tbody className=" text-capitalize">
-                    {category.length > 0 &&
+                    {category?.length &&
                       category.map((cat, index) => {
                         return (
                           <tr key={cat._id}>

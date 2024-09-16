@@ -66,7 +66,7 @@ export const CartPage = () => {
         <hr />
         <div className="row mt-5">
           <div className="col-md-8 mt-0">
-            {cart.map((item, i) => {
+            {cart?.length && cart.map((item, i) => {
               return (
                 <div key={i} className="row border p-1 mb-2">
                   <div className=" col-md-4 ">

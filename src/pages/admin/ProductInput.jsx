@@ -139,7 +139,7 @@ const ProductInput = () => {
                   }}
                 />
                 <datalist id="categoryList">
-                  {category.map((item) => {
+                  {category?.length && category.map((item) => {
                     return <option key={item._id} value={item.slug}></option>;
                   })}
                 </datalist>

@@ -63,7 +63,7 @@ const UserList = () => {
         </div>
         <div className=" col-md-9 p-2">
           <div className="card p-2">
-            <h3>Total users ({adminUsers.length}) </h3>
+            <h3>Total users ({adminUsers?.length}) </h3>
             <div className=" border">
               <table className="table table-hover">
                 <thead>
@@ -78,7 +78,7 @@ const UserList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {adminUsers.length > 0 &&
+                  {adminUsers?.length &&
                     adminUsers.map((item, index) => {
                       return (
                         <tr key={item._id}>

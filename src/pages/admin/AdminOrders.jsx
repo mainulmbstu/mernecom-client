@@ -33,7 +33,7 @@ const AdminOrders = () => {
         console.log(error);
       }
     };
-console.log(loading);
+
   useEffect(() => {
    if (token && userInfo.role) getAdminOrders();
   }, [token, userInfo.role]);
@@ -86,7 +86,8 @@ console.log(loading);
 
           <div className="row ">
             {loading && <Loading />}
-            {adminOrders?.map((item, i) => {
+
+            {adminOrders.length && adminOrders?.map((item, i) => {
               return (
                 <div key={item._id} className=" mt-5 shadow">
                   <table className="table">
@@ -128,7 +129,7 @@ console.log(loading);
                       </tr>
                     </tbody>
                   </table>
-                  {item?.products?.map((p, i) => {
+                  {item?.products?.length && item?.products?.map((p, i) => {
                     return (
                       <div key={i} className="row g-5">
                         <div className="row g-4">

@@ -10,7 +10,7 @@ const SearchResults = () => {
     <Layout title={"Search result"}>
       <div className="row g-3">
         <h3>Search results ({values?.results?.length}) </h3>
-        {values?.results?.map((item) => {
+        {values?.results?.length && values?.results?.map((item) => {
           return (
             <div key={item?._id} className="col-md-3  ">
               <div className="card h-100">

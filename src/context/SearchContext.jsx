@@ -21,7 +21,7 @@ const SearchContextProvider = ({ children }) => {
       }
     );
     let data = await res.json();
-    setSimilarProducts(data.products);
+    setSimilarProducts(data?.products);
   };
   useEffect(() => {
     if (moreInfo.length < 1) return;
