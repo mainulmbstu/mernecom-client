@@ -132,7 +132,7 @@ console.log(loading);
                     return (
                       <div key={i} className="row g-5">
                         <div className="row g-4">
-                          <div className=" col-sm-4">
+                          <div className=" col-4">
                             <img
                               src={`${p?.picture?.secure_url}`}
                               className=" ms-3"
@@ -141,7 +141,7 @@ console.log(loading);
                               alt="image"
                             />
                           </div>
-                          <div className=" col-sm-8 d-flex flex-column">
+                          <div className=" col-8 d-flex flex-column">
                             <div>
                               <h5>Name: {p?.name} </h5>
                               <p>Category: {p?.category?.name} </p>
