@@ -34,7 +34,8 @@ const AuthContextProvider = ({ children }) => {
       let res = await fetch(`${import.meta.env.VITE_BASE_URL}/category/category-list`, {
         method: "GET",
       });
-      setCategory(await res.json());
+      let data = await res.json();
+      setCategory(data);
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +61,7 @@ const AuthContextProvider = ({ children }) => {
         }
       );
       let data = await res.json();
-      setProducts(data.products);
+      setProducts(data?.products);
       setLoadingHome(false);
     } catch (error) {
       console.log(error);

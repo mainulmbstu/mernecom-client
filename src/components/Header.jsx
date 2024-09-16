@@ -6,7 +6,7 @@ import { useSearch } from "../context/SearchContext";
 
 const Header = () => {
   let { token, setToken, userInfo, setUserInfo, category } = useAuth();
-  let sortedCategory = category.toSorted((a, b) => (a.name > b.name ? 1 : -1));
+  // let sortedCategory = category.toSorted((a, b) => (a.name > b.name ? 1 : -1));
   let { cart } = useSearch();
 
   let logoutHandle = () => {
@@ -62,10 +62,10 @@ const Header = () => {
                   className="dropdown-menu text-capitalize"
                   aria-labelledby="navbarDropdownMenuLink"
                 >
-                  {sortedCategory?.map((item) => (
-                    <li key={item._id}>
+                  {category?.length && category?.map((item) => (
+                    <li key={item?._id}>
                       <NavLink
-                        to={`products/category/${item.slug}`}
+                        to={`products/category/${item?.slug}`}
                         className="dropdown-item"
                       >
                         {item?.name}

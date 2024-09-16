@@ -46,7 +46,7 @@ const CategoryTable = () => {
           className=" form-control m-2 text-capitalize"
           type="text"
           name="name"
-          value={inputVal.name}
+          value={inputVal?.name}
           placeholder="Enter category name"
         />
 
