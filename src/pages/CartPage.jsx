@@ -11,7 +11,7 @@ export const CartPage = () => {
   let totalPrice = () => {
     try {
       let total = 0;
-      cart.map((item) => (total += item.price));
+      cart?.length && cart?.map((item) => (total += item?.price));
       return total;
     } catch (error) {
       console.log(error);
@@ -43,7 +43,6 @@ export const CartPage = () => {
         }
       );
       let data = await res.json();
-      console.log(data);
       window.location.replace(data.url);
     } catch (error) {
       console.log(error);
