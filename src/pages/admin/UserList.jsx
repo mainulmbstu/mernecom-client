@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import AdminMenu from "./AdminMenu";
 import Layout from "../../components/Layout";
+import Loading from "../../components/Loading";
 
 const UserList = () => {
   let [adminUsers, setAdminUsers] = useState([]);
   let [okdel, setOkdel] = useState(true);
   let { token, userInfo } = useAuth();
-
+//====================================================
   let roleHandle = async (value, id) => {
     if (id === userInfo._id) {
       return alert("You cannot update yourself");
@@ -27,19 +28,31 @@ const UserList = () => {
     setOkdel((prev) => !prev);
     await alert(data.msg);
   };
+  //============================================================
+  let [loading, setLoading] = useState(false);
+  let getUserList = async () => {
+    try {
+      setLoading(true)
+       if (token && userInfo.role) {
+        let res= await fetch(`${import.meta.env.VITE_BASE_URL}/admin/user-list`, {
+           method: "GET",
+           headers: { Authorization: `Bearer ${token}` },
+         })
+           let data= await res.json()
+           setAdminUsers(data)
+      }
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
 
   useEffect(() => {
-    if (token && userInfo.role) {
-      fetch(`${import.meta.env.VITE_BASE_URL}/admin/user-list`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => res.json())
-        .then((data) => setAdminUsers(data))
-        .catch((error) => console.log(error));
-    }
+    if (token && userInfo.role) getUserList()
   }, [token, okdel, userInfo.role]);
-
+  
+//================================================
   let deletefn = async (id) => {
     if (id === userInfo._id) {
       return alert("You cannot delete yourself");
@@ -64,6 +77,7 @@ const UserList = () => {
         <div className=" col-md-9 p-2">
           <div className="card p-2">
             <h3>Total users ({adminUsers?.length}) </h3>
+            {loading && <Loading/>}
             <div className=" border">
               <table className="table table-hover">
                 <thead>

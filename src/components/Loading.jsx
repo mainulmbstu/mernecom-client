@@ -7,7 +7,7 @@ const Loading = () => {
 <div className=" h-100 d-flex justify-content-center">
         <div
           className="spinner-border align-self-center"
-          style={{ width: "5rem", height: "5rem" }}
+          style={{ width: "3rem", height: "3rem" }}
           role="status"
         >
           <span className="visually-hidden">Loading...</span>

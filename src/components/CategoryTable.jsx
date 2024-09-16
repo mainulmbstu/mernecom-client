@@ -36,28 +36,30 @@ const CategoryTable = () => {
     }
   };
   return (
-    <div className=" mb-3">
-      <div className=" px-3">
-        <h3>Create new category</h3>
+    <div>
+      <div className=" mb-3 col-md-6">
+        <div className=" px-3">
+          <h3>Create new category</h3>
+        </div>
+        <form onSubmit={categorySubmit} className="">
+          <input
+            onChange={inputHandle}
+            className=" form-control m-2 text-capitalize"
+            type="text"
+            name="name"
+            value={inputVal?.name}
+            placeholder="Enter category name"
+          />
+  
+          <button
+            className=" btn btn-primary w-100 text-white fs-5 ms-2 btn-outline-success"
+            type="submit"
+          >
+            Create Category
+          </button>
+        </form>
       </div>
-      <form onSubmit={categorySubmit} className=" w-50">
-        <input
-          onChange={inputHandle}
-          className=" form-control m-2 text-capitalize"
-          type="text"
-          name="name"
-          value={inputVal?.name}
-          placeholder="Enter category name"
-        />
-
-        <button
-          className=" btn btn-primary text-white fs-5 w-50 ms-2 btn-outline-success"
-          type="submit"
-        >
-          Create Category
-        </button>
-      </form>
-      <hr />
+        <hr />
     </div>
   );
 };

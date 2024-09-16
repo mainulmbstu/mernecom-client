@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { useAuth } from "../../context/AuthContext";
+import Loading from "../../components/Loading";
 
 
 
@@ -55,6 +56,9 @@ const Orders = () => {
         <div className=" card p-2 text-center"><h2>All orders ({orders?.length})</h2></div>
 
         <div className="row ">
+          {
+            loading && <Loading/>
+          }
           {orders?.length && orders?.map((item, i) => {
             return (
               <div key={item._id} className=" mt-5 shadow">
