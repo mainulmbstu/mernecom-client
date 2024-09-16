@@ -55,7 +55,7 @@ const Orders = () => {
         <div className=" card p-2 text-center"><h2>All orders ({orders?.length})</h2></div>
 
         <div className="row ">
-          {orders.length?.map((item, i) => {
+          {orders?.length && orders?.map((item, i) => {
             return (
               <div key={item._id} className=" mt-5 shadow">
                 <table className="table">
@@ -81,7 +81,7 @@ const Orders = () => {
                   </tbody>
                 </table>
                 {
-                  item?.products.length?.map((p, i) => {
+                  item?.products?.map((p, i) => {
                     return (
                       <div key={i} className="row g-5">
                         <div className="row g-4">
