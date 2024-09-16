@@ -77,7 +77,7 @@ const UserList = () => {
         <div className=" col-md-9 p-2">
           <div className="card p-2">
             <h3>Total users ({adminUsers?.length}) </h3>
-            {loading && <Loading/>}
+            {loading && <Loading />}
             <div className=" border">
               <table className="table table-hover">
                 <thead>
@@ -92,41 +92,42 @@ const UserList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {adminUsers?.length &&
-                    adminUsers.map((item, index) => {
-                      return (
-                        <tr key={item._id}>
-                          <td>{index + 1}</td>
-                          <td>{item.name}</td>
-                          <td>{item.email}</td>
-                          <td>
-                            <select
-                              onChange={(e) =>
-                                roleHandle(e.target.value, item._id)
-                              }
-                              name=""
-                              className=" border-0"
-                            >
-                              <option value={""}>
-                                {item.role ? "Admin" : "User"}{" "}
-                              </option>
-                              <option value={0}>User</option>
-                              <option value={1}>Admin</option>
-                            </select>
-                          </td>
-                          <td>{item.phone}</td>
-                          <td>{item.address}</td>
-                          <td>
-                            <button
-                              onClick={() => deletefn(item._id)}
-                              className="btn btn-danger"
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                 {adminUsers?.length &&
+                      adminUsers.map((item, index) => {
+                        return (
+                          <tr key={item._id}>
+                            <td>{index + 1}</td>
+                            <td>{item.name}</td>
+                            <td>{item.email}</td>
+                            <td>
+                              <select
+                                onChange={(e) =>
+                                  roleHandle(e.target.value, item._id)
+                                }
+                                name=""
+                                className=" border-0"
+                              >
+                                <option value={""}>
+                                  {item.role ? "Admin" : "User"}{" "}
+                                </option>
+                                <option value={0}>User</option>
+                                <option value={1}>Admin</option>
+                              </select>
+                            </td>
+                            <td>{item.phone}</td>
+                            <td>{item.address}</td>
+                            <td>
+                              <button
+                                onClick={() => deletefn(item._id)}
+                                className="btn btn-danger"
+                              >
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    }
                 </tbody>
               </table>
             </div>
