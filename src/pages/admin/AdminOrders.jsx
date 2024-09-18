@@ -38,10 +38,9 @@ const AdminOrders = () => {
         }
       );
       // let data = await res.json()
-      setPage(page+1);
-      setTotal(data.total)
-      setAdminOrders([...adminOrders,...data.orderList]);
-      console.log(data);
+      setPage(page + 1);
+      setTotal(data.total);
+      setAdminOrders([...adminOrders, ...data.orderList]);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -101,15 +100,16 @@ const AdminOrders = () => {
           <div className="card p-2  sticky-top z-0">
             <AdminMenu />
             <div className=" card p-2 mt-5">
-              <h4>Total Orders: ({adminOrders?.length} of {total}) </h4>
+              <h4>
+                Total Orders: ({adminOrders?.length} of {total}){" "}
+              </h4>
               <h4> Total Sale: BDT {totalPrice} </h4>
             </div>
           </div>
         </div>
         <div className=" col-md-9 px-2">
           <div className="row ">
-           
-
+            {loading && <Loading />}
             <InfiniteScroll
               dataLength={adminOrders.length}
               next={getAdminOrders}
@@ -191,6 +191,21 @@ const AdminOrders = () => {
                   );
                 })}
             </InfiniteScroll>
+          </div>
+          <div className="d-flex">
+            {adminOrders.length < total ? (
+              <>
+                <button
+                  onClick={() => getAdminOrders()}
+                  className="btn btn-primary my-3 px-3 mx-auto"
+                  disabled={loading}
+                >
+                  {loading ? "Loading..." : "Load More"}
+                </button>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>

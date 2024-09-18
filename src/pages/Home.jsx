@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import useStore from "../hooks/useStore";
-import {  Checkbox } from "antd";
+import { Checkbox } from "antd";
 import { toast } from "react-toastify";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useSearch } from "../context/SearchContext";
 import Layout from "../components/Layout";
@@ -10,18 +10,19 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import Loading from "../components/Loading";
 import Marquee from "react-fast-marquee";
+import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const Home = () => {
-  let { category, } = useStore();
-  let { products, setProducts, page, setPage, loadingHome } = useAuth();
-  let {cart, setCart } = useSearch();
+  let { category } = useStore();
+  let { cart, setCart } = useSearch();
 
   // let cat = () => {};
 
   const [checkedCat, setCheckedCat] = useState([]);
   const [priceCat, setPriceCat] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [total, setTotal] = useState(0);
+  const [products, setProducts] = useState([]);
 
   let catHandle = (checked, id) => {
     let all = [...checkedCat];
@@ -37,95 +38,131 @@ const Home = () => {
   // );
   // let newArr = checkedCat.length === 0 ? products : checkedArr;
   //==============  filter ====================================
-  let getProductFilter = async () => {
-    let res = await fetch(`${import.meta.env.VITE_BASE_URL}/products/product-filter`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ checkedCat, priceCat }),
-    });
-    let data = await res.json();
-    if (!res.ok) {
-      return toast.error(data.msg);
+  const [filterProducts, setFilterProducts] = useState([]);
+  const [filterPage, setFilterPage] = useState(1);
+  let [total, setTotal] = useState(0);
+
+  // let finalProducts=[]
+  // filterProducts.length ? finalProducts = [...filterProducts] : finalProducts = [...products]
+  
+
+
+  let getProductFilterClick = async (filterPage) => {
+    try {
+      setLoading(true);
+      let { data } = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/products/product-filter`,
+        {
+          checkedCat,
+          priceCat,
+          pageOrSize: {
+            page: filterPage,
+            size: 2,
+          },
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!data.success) {
+        return toast.error(data.msg);
+      }
+      // setFilterPage(filterPage + 1)
+      setTotal(data.total);
+      setProducts([...products, ...data.products]);
+      setFilterProducts(data.products);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
     }
-    setProducts(data?.products);
   };
 
+
+  let getProductFilter = async (filterPage) => {
+    try {
+      setLoading(true);
+      let { data } = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/products/product-filter`,
+        {
+          checkedCat,
+          priceCat,
+          pageOrSize: {
+            page: filterPage,
+            size: 2,
+          },
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!data.success) {
+        return toast.error(data.msg);
+      }
+      // setFilterPage(filterPage + 1)
+      setTotal(data.total);
+      setProducts(data.products);
+      setFilterProducts(data.products);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    getProductFilter();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (
+      priceCat.length !== 0 ||
+      checkedCat.length !== 0 
+    )
+
+      getProductFilter(filterPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedCat, priceCat]);
 
-  // useEffect(() => {
-  //  if(checkedCat.length || priceCat.length) getProductFilter();
 
-  // }, [checkedCat, priceCat]);
-  //========== all products ==================
+  //========== products with limit  ==================
 
-  // let getProducts = async () => {
-  //   let res = await fetch(
-  //     `http://localhost:8000/products/product-list-per-page/${page}`,
-  //     {
-  //       method: "GET",
-  //     }
-  //   );
-  //   let data = await res.json();
-  //   setProducts(data.products);
-  // };
-
-  // useEffect(() => {
-  //   getProducts();
-  // }, []);
-
-  let loadMore = async () => {
-    setLoading(true);
-    let res = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/products/product-list-per-page/${page}`,
-      {
-        method: "GET",
-      }
-    );
-    let data = await res.json();
-    setProducts((prev) => [...prev, ...data.products]);
-    setLoading(false);
+  let [page, setPage] = useState(1);
+  let getProducts = async () => {
+    try {
+      setLoading(true);
+      let { data } = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/products/product-list-limit`,
+        {
+          params: {
+            page: page,
+            size: 4,
+          },
+        }
+      );
+      setPage(page + 1);
+      setTotal(data.total);
+      setProducts([...products, ...data.products]);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
+console.log(total);
   useEffect(() => {
-    if (page === 1) return;
-    loadMore();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  //=================== get total no. of products
-  let getTotal = async () => {
-    let res = await fetch(`${import.meta.env.VITE_BASE_URL}/products/product-count`, {
-      method: "GET",
-    });
-    let data = await res.json();
-    setTotal(data?.total);
-  };
-
-  useEffect(() => {
-    getTotal();
+    getProducts();
   }, []);
 
+  //===========================================
   return (
     <Layout title={"home"}>
       <div className=" hero-area text-danger">
-        <Marquee direction="left" speed={300} autofill={false} loop={''}>
-          <h1 >WELCOME TO DEMO ECOMMERCE WEBSITE ||   </h1>
+        <Marquee direction="left" speed={300} autofill={false} loop={""}>
+          <h1>WELCOME TO DEMO ECOMMERCE WEBSITE || </h1>
         </Marquee>
       </div>
       <div className="row px-md-4">
         <div className="col-md-2">
           <h5>Category</h5>
           <div className=" d-flex flex-column">
-            {category?.length && category?.map((item) => (
-              <Checkbox
-                key={item?._id}
-                onChange={(e) => catHandle(e.target.checked, item._id)}
-              >
-                {item?.name}
-              </Checkbox>
-            ))}
+            {category?.length &&
+              category?.map((item) => (
+                <Checkbox
+                  key={item?._id}
+                  onChange={(e) => catHandle(e.target.checked, item._id)}
+                >
+                  {item?.name}
+                </Checkbox>
+              ))}
 
             {/* {category?.map((item) => {
             return (
@@ -211,76 +248,100 @@ const Home = () => {
           <h3>
             {!checkedCat.length ? "All Products" : "Products by category"}
           </h3>
-          {loadingHome && <Loading />}
           <h3 className=" text-danger">
             {!products?.length ? "No Product Found!!" : ""}
           </h3>
-          <div className="row g-3">
-            {products?.length && products?.map((item) => {
-              return (
-                <div key={item?._id} className="col-md-3  ">
-                  <div className="card h-100">
-                    <LazyLoadImage
-                      src={`${item?.picture?.secure_url}`}
-                      className=" "
-                      height={150}
-                      alt="image"
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">{item?.name}</h5>
-                      <div className="card-text">
-                        <p className="m-0">Category: {item?.category?.name} </p>
-                        <p className="m-0">Price: {item?.price} </p>
-                        <p className="m-0">
-                          Available quantity: {item?.quantity}
-                        </p>
-                        <p className="m-0">
-                          Description: {item?.description.substring(0, 8)} ....
-                        </p>
+
+          <InfiniteScroll
+            dataLength={products.length}
+            next={!checkedCat.length && !priceCat.length && getProducts}
+            hasMore={products.length < total}
+            loader={<h1>Loading...</h1>}
+            endMessage={<h4 className=" text-center">All items loaded</h4>}
+          >
+            <div className="row g-3">
+              {products?.length &&
+                products?.map((item) => {
+                  return (
+                    <div key={item?._id} className="col-md-3  ">
+                      <div className="card h-100">
+                        <LazyLoadImage
+                          src={`${item?.picture?.secure_url}`}
+                          className=" "
+                          height={150}
+                          alt="image"
+                        />
+                        <div className="card-body">
+                          <h5 className="card-title">{item?.name}</h5>
+                          <div className="card-text">
+                            <p className="m-0">
+                              Category: {item?.category?.name}{" "}
+                            </p>
+                            <p className="m-0">Price: {item?.price} </p>
+                            <p className="m-0">
+                              Available quantity: {item?.quantity}
+                            </p>
+                            <p className="m-0">
+                              Description: {item?.description.substring(0, 8)}{" "}
+                              ....
+                            </p>
+                          </div>
+                        </div>
+                        <div className=" d-flex justify-content-evenly">
+                          <Link to={`products/more-info/${item?._id}`}>
+                            <button
+                              // onClick={() => navigate(`products/more-info/${item?._id}`)}
+                              className="btn btn-primary "
+                            >
+                              More info
+                            </button>
+                          </Link>
+                          <button
+                            onClick={() => {
+                              setCart([...cart, item]);
+                              localStorage.setItem(
+                                "cart",
+                                JSON.stringify([...cart, item])
+                              );
+                              toast.success(`${item.name} added to Cart`);
+                            }}
+                            className="btn btn-info mt-auto mb-1"
+                          >
+                            Add to cart
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className=" d-flex justify-content-evenly">
-                      <Link to={`products/more-info/${item?._id}`}>
-                        <button
-                          // onClick={() => navigate(`products/more-info/${item?._id}`)}
-                          className="btn btn-primary "
-                        >
-                          More info
-                        </button>
-                      </Link>
-                      <button
-                        onClick={() => {
-                          setCart([...cart, item]);
-                          localStorage.setItem(
-                            "cart",
-                            JSON.stringify([...cart, item])
-                          );
-                          toast.success(`${item.name} added to Cart`);
-                        }}
-                        className="btn btn-info mt-auto mb-1"
-                      >
-                        Add to cart
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                  );
+                })}
+            </div>
+          </InfiniteScroll>
+          {loading && <Loading />}
+
         </div>
-        <div className="m-3 d-flex justify-content-center">
-          {products && products?.length < total && (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setPage(page + 1);
-              }}
-              className="btn btn-success px-5"
-            >
-              {loading ? "loading..." : "Load More"}
-            </button>
+        <div className="d-flex">
+          {products.length < total ? (
+            <>
+              <button
+                onClick={() => {
+                  if (!checkedCat.length && !priceCat.length) {
+                    getProducts()
+                  } else {
+                     setFilterPage(filterPage+1)
+                  getProductFilterClick(filterPage + 1);
+                  }
+                }}
+                className="btn btn-primary my-3 px-3 mx-auto"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Load More"}
+              </button>
+            </>
+          ) : (
+            ""
           )}
         </div>
+
       </div>
     </Layout>
   );
