@@ -98,7 +98,7 @@ const AdminProfile = () => {
                     placeholder="Full Name"
                   />
                   <label className=" text-start ms-3" htmlFor="">
-                    email::
+                    email:
                   </label>
                   <input
                     onChange={inputHandle}
@@ -126,7 +126,7 @@ const AdminProfile = () => {
                     placeholder="password"
                   />
                   <label className=" text-start ms-3" htmlFor="">
-                    Phone::
+                    Phone:
                   </label>
                   <input
                     onChange={inputHandle}
@@ -137,7 +137,7 @@ const AdminProfile = () => {
                     placeholder="Phone number"
                   />
                   <label className=" text-start ms-3" htmlFor="">
-                    Address::
+                    Address:
                   </label>
                   <input
                     onChange={inputHandle}

@@ -11,14 +11,15 @@ import Loading from "../../components/Loading";
 
 
 const CreateProduct = () => {
-  let { token, getEditData } = useAuth();
-
+  let { token,} = useAuth();
   const [selectedItem, setSelectedItem] = useState([]);
+  const [editProduct, setEditProduct] = useState('');
   //=============================================================
   let [page, setPage] = useState(1);
   let [total, setTotal] = useState(0);
   let [products, setProducts] = useState([]);
-
+  let [loading, setLoading] = useState(false);
+  
   let getProducts = async () => {
     try {
       setLoading(true);
@@ -45,7 +46,7 @@ const CreateProduct = () => {
     getProducts();
   }, []);
   //======================================================
-  let [loading, setLoading] = useState(false);
+
 
   let deleteItem = async (id, name, item) => {
     setLoading(true);
@@ -162,7 +163,7 @@ const CreateProduct = () => {
                                 </button>
 
                                 <button
-                                  onClick={() => getEditData(item)}
+                                  onClick={() => setEditProduct(item)}
                                   type="button"
                                   className="btn btn-primary ms-2"
                                   data-bs-toggle="modal"
@@ -170,7 +171,13 @@ const CreateProduct = () => {
                                 >
                                   Details & Edit
                                 </button>
-                                <UpdateProductModal />
+                                <UpdateProductModal
+                                  value={{
+                                    editProduct,
+                                    getProducts,
+                                    setEditProduct,
+                                  }}
+                                />
                               </td>
                             </tr>
                           );
@@ -202,5 +209,5 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default  CreateProduct;
 // export default UseEdit;

@@ -16,7 +16,7 @@ const ProductInput = () => {
     picture: "",
     shipping: 0,
   });
-  let { token, getProducts, category } = useAuth();
+  let { token, category } = useAuth();
   // console.log(inputVal);
   let inputHandle = (e) => {
     let { name, value } = e.target;
@@ -35,7 +35,7 @@ const ProductInput = () => {
     formdata.append("quantity", inputVal.quantity);
     formdata.append("shipping", inputVal.shipping);
     try {
-      await setLoading(true);
+      setLoading(true);
 
       let { data } = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/products/create-product`,
@@ -58,8 +58,8 @@ const ProductInput = () => {
           picture: "",
           shipping: "",
         });
-        await getProducts();
         setLoading(false);
+        // getProducts();
         window.location.reload()
       } else {
         toast.error(data.msg);

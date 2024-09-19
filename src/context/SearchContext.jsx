@@ -1,10 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import axios  from "axios";
 
 export const SearchContext = createContext();
 
 const SearchContextProvider = ({ children }) => {
-  const [values, setValues] = useState({ keyword: "", results: [] });
+  const [keyword, setKeyword] = useState('');
+  const [results, setResults] = useState([]);
   const [moreInfo, setMoreInfo] = useState("");
+
+
 
   let getMoreInfo = async (item) => {
     setMoreInfo(item);
@@ -33,18 +37,73 @@ const SearchContextProvider = ({ children }) => {
     let storageCart = localStorage.getItem('cart')
     if(storageCart) setCart(JSON.parse(storageCart))
   }, [])
+  //=================================================
+    let [page, setPage] = useState(1);
+  let [total, setTotal] = useState(0);
   
+  let submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      let { data } = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/products/search`,
+        {
+          params: {
+           keyword:keyword,
+            page: 1,
+            size: 4,
+          },
+        }
+      );
+      setPage(2)
+      setTotal(data.total)
+      setResults(data.products);
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
+  
+  let submitHandlerScroll = async (page) => {
+    try {
+      let { data } = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/products/search`,
+        {
+          params: {
+           keyword:keyword,
+            page: page,
+            size: 4,
+          },
+        }
+      );
+      console.log(data)
+      setPage(page+1)
+      setResults([...results,...data.products]);
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
+
+    // useEffect(() => {
+    //  keyword && submitHandlerScroll()
+    // }, []);
 
   return (
     <SearchContext.Provider
       value={{
-        values,
-        setValues,
         getMoreInfo,
         moreInfo,
         similarProducts,
         cart,
         setCart,
+        keyword,
+        setKeyword,
+        results,
+        setResults,
+        submitHandler,
+        total,
+        page,
+        submitHandlerScroll,
       }}
     >
       {children}

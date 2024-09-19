@@ -46,11 +46,13 @@ const AuthContextProvider = ({ children }) => {
   }, []);
   
   //======================================================================
-    // get edit data 
-  const [editData, setEditData] = useState([]);
-    let getEditData = (item) => {
-      setEditData(item);
-    };
+    // get edit data (edit Product)
+  // const [editData, setEditData] = useState([]);
+  //   let getEditData = (item) => {
+  //     setEditData(item);
+  // };
+  
+
   return (
     <AuthContext.Provider
       value={{
@@ -61,9 +63,9 @@ const AuthContextProvider = ({ children }) => {
         getUserInfo,
         category,
         getCategory,
-        getEditData,
-        editData,
-        setEditData,
+        // getEditData,
+        // editData,
+        // setEditData,
 
       }}
     >

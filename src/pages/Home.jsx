@@ -44,10 +44,8 @@ const Home = () => {
 
   // let finalProducts=[]
   // filterProducts.length ? finalProducts = [...filterProducts] : finalProducts = [...products]
-  
 
-
-  let getProductFilterClick = async (filterPage) => {
+  let getProductFilterClick = async () => {
     try {
       setLoading(true);
       let { data } = await axios.post(
@@ -57,7 +55,7 @@ const Home = () => {
           priceCat,
           pageOrSize: {
             page: filterPage,
-            size: 2,
+            size: 4,
           },
           headers: { "Content-Type": "application/json" },
         }
@@ -67,6 +65,7 @@ const Home = () => {
       }
       // setFilterPage(filterPage + 1)
       setTotal(data.total);
+      setFilterPage(filterPage + 1);
       setProducts([...products, ...data.products]);
       setFilterProducts(data.products);
       setLoading(false);
@@ -74,9 +73,9 @@ const Home = () => {
       console.log(error);
     }
   };
+  console.log(total);
 
-
-  let getProductFilter = async (filterPage) => {
+  let getProductFilter = async () => {
     try {
       setLoading(true);
       let { data } = await axios.post(
@@ -86,7 +85,7 @@ const Home = () => {
           priceCat,
           pageOrSize: {
             page: filterPage,
-            size: 2,
+            size: 4,
           },
           headers: { "Content-Type": "application/json" },
         }
@@ -96,27 +95,24 @@ const Home = () => {
       }
       // setFilterPage(filterPage + 1)
       setTotal(data.total);
+      setFilterPage(2);
       setProducts(data.products);
-      setFilterProducts(data.products);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    if (
-      priceCat.length !== 0 ||
-      checkedCat.length !== 0 
-    )
 
+  useEffect(() => {
+    if (priceCat.length !== 0 || checkedCat.length !== 0)
       getProductFilter(filterPage);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedCat, priceCat]);
 
-
   //========== products with limit  ==================
 
   let [page, setPage] = useState(1);
+
   let getProducts = async () => {
     try {
       setLoading(true);
@@ -137,7 +133,6 @@ const Home = () => {
       console.log(error);
     }
   };
-console.log(total);
   useEffect(() => {
     getProducts();
   }, []);
@@ -254,7 +249,11 @@ console.log(total);
 
           <InfiniteScroll
             dataLength={products.length}
-            next={!checkedCat.length && !priceCat.length && getProducts}
+            next={
+              !checkedCat.length && !priceCat.length
+                ? getProducts
+                : getProductFilterClick
+            }
             hasMore={products.length < total}
             loader={<h1>Loading...</h1>}
             endMessage={<h4 className=" text-center">All items loaded</h4>}
@@ -317,7 +316,6 @@ console.log(total);
             </div>
           </InfiniteScroll>
           {loading && <Loading />}
-
         </div>
         <div className="d-flex">
           {products.length < total ? (
@@ -325,10 +323,9 @@ console.log(total);
               <button
                 onClick={() => {
                   if (!checkedCat.length && !priceCat.length) {
-                    getProducts()
+                    getProducts();
                   } else {
-                     setFilterPage(filterPage+1)
-                  getProductFilterClick(filterPage + 1);
+                    getProductFilterClick();
                   }
                 }}
                 className="btn btn-primary my-3 px-3 mx-auto"
@@ -341,7 +338,6 @@ console.log(total);
             ""
           )}
         </div>
-
       </div>
     </Layout>
   );

@@ -1,6 +1,6 @@
 import ProductUpdateInput from "./ProductUpdateInput";
 
-const UpdateProductModal = () => {
+const UpdateProductModal = ({value}) => {
   return (
     <div>
       <div>
@@ -39,7 +39,7 @@ const UpdateProductModal = () => {
                 />
               </div>
               <div className="modal-body">
-                <ProductUpdateInput />
+                <ProductUpdateInput value={value} />
               </div>
             </div>
           </div>

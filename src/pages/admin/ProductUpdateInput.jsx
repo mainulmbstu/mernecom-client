@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Layout from "../../components/Layout";
 
-const ProductUpdateInput = () => {
+const ProductUpdateInput = ({ value }) => {
   let [loading, setLoading] = useState(false);
   let [trix, setTrix] = useState(true);
   const [inputVal, setInputVal] = useState({
@@ -16,18 +16,18 @@ const ProductUpdateInput = () => {
     picture: "",
     shipping: "",
   });
+  let { token, category } = useAuth();
+  let { editProduct, getProducts, setEditProduct } = value;
 
-  let { token, getProducts, category, editData, setEditData } = useAuth();
-
-  if (editData?.name && trix) {
+  if (editProduct?.name && trix) {
     setInputVal({
-      name: editData.name,
-      description: editData.description,
-      category: editData.category._id,
-      price: editData.price,
-      quantity: editData.quantity,
+      name: editProduct.name,
+      description: editProduct.description,
+      category: editProduct.category._id,
+      price: editProduct.price,
+      quantity: editProduct.quantity,
       picture: "",
-      shipping: editData.shipping,
+      shipping: editProduct.shipping,
     });
     setTrix(false);
   }
@@ -50,12 +50,10 @@ const ProductUpdateInput = () => {
     formdata.append("quantity", inputVal.quantity);
     formdata.append("shipping", inputVal.shipping);
     try {
-      await setLoading(true);
+      setLoading(true);
 
       let { data } = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/products/update-product/${
-          editData._id
-        }`,
+        `${import.meta.env.VITE_BASE_URL}/products/update-product/${editProduct?._id}`,
         formdata,
         {
           headers: {
@@ -66,18 +64,9 @@ const ProductUpdateInput = () => {
       );
       if (data.success) {
         toast.success(data.msg);
-        setInputVal({
-          name: "",
-          description: "",
-          category: "",
-          price: "",
-          quantity: "",
-          picture: "",
-          shipping: "",
-        });
         setTrix(true);
-        setEditData([]);
-        await getProducts();
+        setEditProduct("");
+       getProducts();
         setLoading(false);
       } else {
         toast.error(data.msg);
@@ -117,7 +106,7 @@ const ProductUpdateInput = () => {
                     className="form-control"
                     list="categoryList"
                     type={"text"}
-                    placeholder={editData?.category?.name}
+                    placeholder={editProduct?.category?.name}
                     onChange={(e) => {
                       let cat = category.filter(
                         (item) => item.slug === e.target.value
@@ -208,7 +197,7 @@ const ProductUpdateInput = () => {
                   <div>
                     <p>Current Image</p>
                     <img
-                      src={editData?.picture?.secure_url}
+                      src={editProduct?.picture?.secure_url}
                       alt="image"
                       className="img img-responsive"
                       height={"100px"}
