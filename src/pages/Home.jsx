@@ -73,7 +73,6 @@ const Home = () => {
       console.log(error);
     }
   };
-  console.log(total);
 
   let getProductFilter = async () => {
     try {

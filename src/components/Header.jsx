@@ -6,8 +6,14 @@ import { useSearch } from "../context/SearchContext";
 
 const Header = () => {
   let { token, setToken, userInfo, setUserInfo, category } = useAuth();
-  let sortedCategory = category?.length && category?.toSorted((a, b) => (a.name > b.name ? 1 : -1));
+  // let sortedCategory = category?.length && category?.toSorted((a, b) => (a.name > b.name ? 1 : -1));
   let { cart } = useSearch();
+  let catCopy=[...category]
+  let sortedCategory = catCopy.sort((a, b) => {
+    a = a.name.toLowerCase()
+    b = b.name.toLowerCase()
+    return a > b? 1 : -1
+  });
 
   let logoutHandle = () => {
     localStorage.removeItem("token");
