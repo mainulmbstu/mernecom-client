@@ -3,22 +3,24 @@ import { useSearch } from "../context/SearchContext";
 import { toast } from "react-toastify";
 import Layout from "./Layout";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Loading from './Loading';
 
 const SearchResults = () => {
-  const { results, cart, setCart, submitHandlerScroll, total, page } = useSearch();
+  const { results, cart, setCart, submitHandlerScroll, total, page, loading } = useSearch();
 
 
   return (
     <Layout title={"Search result"}>
       <InfiniteScroll
         dataLength={results?.length && results?.length}
-        next={()=>submitHandlerScroll(page)}
+        next={() => submitHandlerScroll(page)}
         hasMore={results?.length < total}
         loader={<h1>Loading...</h1>}
         endMessage={<h4 className=" text-center">All items loaded</h4>}
       >
         <div className="row g-3">
           <h3>Search results ({results?.length}) </h3>
+          {loading && <Loading/>}
           {results?.length &&
             results?.map((item) => {
               return (
@@ -28,6 +30,8 @@ const SearchResults = () => {
                       src={`${item?.picture?.secure_url}`}
                       className=" card-img-top"
                       alt="image"
+                      height={200}
+                      width={200}
                     />
                     <div className="card-body">
                       <h5 className="card-title">{item?.name}</h5>
@@ -64,6 +68,21 @@ const SearchResults = () => {
             })}
         </div>
       </InfiniteScroll>
+      <div className="d-flex">
+        {results.length < total ? (
+          <>
+            <button
+              onClick={() => submitHandlerScroll(page)}
+              className="btn btn-primary my-3 px-3 mx-auto"
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "Load More"}
+            </button>
+          </>
+        ) : (
+          ""
+        )}
+      </div>
     </Layout>
   );
 };

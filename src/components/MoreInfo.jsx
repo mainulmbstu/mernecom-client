@@ -3,21 +3,25 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSearch } from "../context/SearchContext";
 import Layout from "./Layout";
+import Loading from "./Loading";
 
 const MoreInfo = () => {
   const [moreInfo, setMoreInfo] = useState("");
   const [similarProducts, setSimilarProducts] = useState([]);
   let params = useParams();
   let { cart, setCart } = useSearch();
+  const [loading, setLoading] = useState(false);
 
   let getMoreInfo = async () => {
     try {
+      setLoading(true)
       let res = await fetch(
         `${import.meta.env.VITE_BASE_URL}/products/more-info/${params.pid}`,
         {
           method: "GET",
         }
       );
+      setLoading(false);
       let data = await res.json();
       setMoreInfo(data.products[0]);
     } catch (error) {
@@ -31,6 +35,7 @@ const MoreInfo = () => {
 
   let getSimilarProducts = async () => {
     try {
+      setLoading(true);
       let res = await fetch(
         `${import.meta.env.VITE_BASE_URL}/products/search/similar/${
           moreInfo?._id
@@ -39,6 +44,7 @@ const MoreInfo = () => {
           method: "GET",
         }
       );
+      setLoading(false);
       let data = await res.json();
       setSimilarProducts(data.products);
       window.scrollTo(0, 0);
@@ -58,6 +64,7 @@ const MoreInfo = () => {
           <div className="row g-4 border">
             <h1 className=" text-center">Details of product</h1>
             <hr />
+            {loading && <Loading/>}
             <div className=" col-md-6">
               <img
                 src={`${moreInfo?.picture?.secure_url}`}
@@ -96,6 +103,7 @@ const MoreInfo = () => {
         <hr />
         <div className=" mb-4">
           <h4>Similar Products</h4>
+          {/* {loading && <Loading/>} */}
           <div className="row g-3">
             {similarProducts?.length && similarProducts?.map((item) => {
               return (

@@ -267,7 +267,7 @@ const Home = () => {
                         <LazyLoadImage
                           src={`${item?.picture?.secure_url}`}
                           className=" "
-                          height={150}
+                          height={200}
                           alt="image"
                         />
                         <div className="card-body">

@@ -7,25 +7,33 @@ const SearchContextProvider = ({ children }) => {
   const [keyword, setKeyword] = useState('');
   const [results, setResults] = useState([]);
   const [moreInfo, setMoreInfo] = useState("");
+  const [loading, setLoading] = useState(false);
 
 
 
   let getMoreInfo = async (item) => {
     setMoreInfo(item);
   };
+  //========================================================
   const [similarProducts, setSimilarProducts] = useState([]);
 
   let getSimilarProducts = async () => {
-    let res = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/products/search/similar/${
-        moreInfo?._id
-      }/${moreInfo?.category?._id}`,
-      {
-        method: "GET",
-      }
-    );
-    let data = await res.json();
-    setSimilarProducts(data?.products);
+    try {
+      setLoading(true)
+      let res = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/products/search/similar/${
+          moreInfo?._id
+        }/${moreInfo?.category?._id}`,
+        {
+          method: "GET",
+        }
+      );
+      setLoading(false)
+      let data = await res.json();
+      setSimilarProducts(data?.products);
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     if (moreInfo.length < 1) return;
@@ -44,6 +52,7 @@ const SearchContextProvider = ({ children }) => {
   let submitHandler = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       let { data } = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/products/search`,
         {
@@ -54,6 +63,7 @@ const SearchContextProvider = ({ children }) => {
           },
         }
       );
+      setLoading(false);
       setPage(2)
       setTotal(data.total)
       setResults(data.products);
@@ -65,6 +75,7 @@ const SearchContextProvider = ({ children }) => {
   
   let submitHandlerScroll = async (page) => {
     try {
+      setLoading(true);
       let { data } = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/products/search`,
         {
@@ -75,6 +86,7 @@ const SearchContextProvider = ({ children }) => {
           },
         }
       );
+      setLoading(false);
       console.log(data)
       setPage(page+1)
       setResults([...results,...data.products]);
@@ -104,6 +116,7 @@ const SearchContextProvider = ({ children }) => {
         total,
         page,
         submitHandlerScroll,
+        loading
       }}
     >
       {children}
