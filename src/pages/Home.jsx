@@ -83,7 +83,7 @@ const Home = () => {
           checkedCat,
           priceCat,
           pageOrSize: {
-            page: filterPage,
+            page: 1,
             size: 4,
           },
           headers: { "Content-Type": "application/json" },
@@ -104,7 +104,7 @@ const Home = () => {
 
   useEffect(() => {
     if (priceCat.length !== 0 || checkedCat.length !== 0)
-      getProductFilter(filterPage);
+      getProductFilter();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedCat, priceCat]);
 
