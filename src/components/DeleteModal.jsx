@@ -1,6 +1,8 @@
 import React from "react";
 
-const DeleteModal = ({ deleteCategory, delId }) => {
+const DeleteModal = ({ value }) => {
+  
+
   return (
     <div>
       <div>
@@ -39,7 +41,7 @@ const DeleteModal = ({ deleteCategory, delId }) => {
                 />
               </div>
               <div className="modal-body">
-                <h3>Do you want to delete this?</h3>
+                <h5>{`Do you want to delete ${value?.item?.name} ?`}</h5>
               </div>
               <div className="modal-footer d-flex justify-content-evenly">
                 <button
@@ -50,7 +52,7 @@ const DeleteModal = ({ deleteCategory, delId }) => {
                   NO
                 </button>
                 <button
-                  onClick={() => deleteCategory(delId)}
+                  onClick={() => value.func(value?.item?._id)}
                   type="button"
                   className="btn btn-primary w-25"
                   data-bs-dismiss="modal"

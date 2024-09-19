@@ -4,15 +4,15 @@ import { toast } from "react-toastify";
 import Layout from "../../components/Layout";
 
 // eslint-disable-next-line react/prop-types
-const UpdateCategory = ({ selectedCat, setSelectedCat }) => {
+const UpdateCategory = ({ value }) => {
   const [inputVal, setInputVal] = useState({ name: "" });
   const [trix, setTrix] = useState(true);
   let { token, getCategory } = useAuth();
   
   // eslint-disable-next-line react/prop-types
-  if (selectedCat?.cat?.name && trix) {
+  if (value?.updateItem?.name && trix) {
     // eslint-disable-next-line react/prop-types
-    setInputVal({ name: selectedCat?.cat?.name });
+    setInputVal({ name: value?.updateItem?.name });
     setTrix(false);
   }
   let inputHandle = (e) => {
@@ -26,7 +26,7 @@ const UpdateCategory = ({ selectedCat, setSelectedCat }) => {
       let res = await fetch(
         `${import.meta.env.VITE_BASE_URL}/category/update-category/${
           // eslint-disable-next-line react/prop-types
-          selectedCat?.cat?._id
+          value?.updateItem?._id
         }`,
         {
           method: "PATCH",
@@ -43,7 +43,7 @@ const UpdateCategory = ({ selectedCat, setSelectedCat }) => {
         toast.success(data.msg);
         setInputVal({ name: "" });
         getCategory();
-        setSelectedCat({});
+        value.setUpdateItem("");
         setTrix(true);
       } else {
         toast.error(data.msg);

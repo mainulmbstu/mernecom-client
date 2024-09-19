@@ -9,11 +9,11 @@ import Layout from "../../components/Layout";
 
 const CreateCategory = () => {
   let { category, token, getCategory } = useAuth();
-  const [selectedCat, setSelectedCat] = useState({});
+  const [updateItem, setUpdateItem] = useState('');
   //============================================================
-  const [delId, setDelId] = useState("");
+  const [delItem, setDelItem] = useState("");
 
-  let deleteCategory = async (id, name) => {
+  let deleteCategory = async (id) => {
     let res = await fetch(
       `${import.meta.env.VITE_BASE_URL}/category/delete-category/${id}`,
       {
@@ -24,7 +24,7 @@ const CreateCategory = () => {
     let data = await res.json();
     if (res.ok) {
       getCategory();
-      toast.success(`${name} is deleted successfully`);
+      toast.success(`${delItem?.name} is deleted successfully`);
     } else {
       toast.success(data.msg);
     }
@@ -66,7 +66,7 @@ const CreateCategory = () => {
                             <td>{cat.name}</td>
                             <td>
                               <button
-                                onClick={() => setSelectedCat({ cat })}
+                                onClick={() => setUpdateItem(cat)}
                                 type="button"
                                 className="btn btn-primary"
                                 data-bs-toggle="modal"
@@ -77,7 +77,7 @@ const CreateCategory = () => {
                             </td>
                             <td>
                               <button
-                                onClick={() => setDelId(cat._id)}
+                                onClick={() => setDelItem(cat)}
                                 type="button"
                                 className="btn btn-danger"
                                 data-bs-toggle="modal"
@@ -94,11 +94,10 @@ const CreateCategory = () => {
                   </tbody>
                 </table>
                 <UpdateCategory
-                  selectedCat={selectedCat}
-                  setSelectedCat={setSelectedCat}
+                  value={{updateItem, setUpdateItem}}
                 />
               </div>
-              <DeleteModal deleteCategory={deleteCategory} delId={delId} />
+            <DeleteModal value={{func:deleteCategory, item:delItem}} />
             </div>
           </div>
         </div>

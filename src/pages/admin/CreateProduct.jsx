@@ -8,6 +8,7 @@ import Layout from "../../components/Layout";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "../../components/Loading";
+import DeleteModal from "../../components/DeleteModal";
 
 
 const CreateProduct = () => {
@@ -46,11 +47,11 @@ const CreateProduct = () => {
     getProducts();
   }, []);
   //======================================================
+  let [delItem, setDelItem] = useState('');
 
-
-  let deleteItem = async (id, name, item) => {
+  let deleteItem = async (id) => {
     setLoading(true);
-    setSelectedItem(item);
+    // setSelectedItem(item);
     let res = await fetch(
       `${import.meta.env.VITE_BASE_URL}/products/delete-product/${id}`,
       {
@@ -60,11 +61,11 @@ const CreateProduct = () => {
     );
     let data = await res.json();
     if (res.ok) {
-      getProducts();
-      toast.success(`${name} is deleted successfully`);
+      toast.success(`${delItem?.name} is deleted successfully`);
       setLoading(false);
+      window.location.reload()
     } else {
-      toast.success(data.msg);
+      toast.success(data?.msg);
     }
   };
   //====================================================================
@@ -139,10 +140,10 @@ const CreateProduct = () => {
                               {/* <td>{"edit/update"}</td> */}
                               <td>
                                 <button
-                                  onClick={() =>
-                                    deleteItem(item._id, item.name, item)
-                                  }
+                                  onClick={() => setDelItem(item)}
                                   className="btn btn-danger"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#deleteCategory"
                                   disabled={loading}
                                 >
                                   {loading && item._id === selectedItem._id ? (
@@ -185,6 +186,7 @@ const CreateProduct = () => {
                     </tbody>
                   </table>
                 </InfiniteScroll>
+                <DeleteModal value={ {func:deleteItem, item:delItem}} />
               </div>
             </div>
           </div>

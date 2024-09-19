@@ -42,13 +42,16 @@ const Login = () => {
 
   return (
     <Layout title={"Login"}>
-      <div className=" d-flex justify-content-center my-auto">
-        <div className=" text-center shadow py-5 pe-3">
+      <div
+        className=" d-flex flex-column justify-content-center border"
+        style={{ height: "90vh" }}
+      >
+        <div className=" text-center shadow  bg-dark text-white py-4 p-2 col-md-3 mx-auto">
           <h2>LOGIN FORM</h2>
           <form onSubmit={submitted} action="">
             <input
               onChange={inputHandle}
-              className=" form-control m-2 border-0 border-bottom border-black rounded-0"
+              className=" form-control mt-2 border-0 border-bottom border-black rounded-0"
               type="email"
               name="email"
               value={user.email}
@@ -58,7 +61,7 @@ const Login = () => {
             <div className=" position-relative">
               <input
                 onChange={inputHandle}
-                className="form-control m-2 border-0 border-bottom border-black rounded-0"
+                className="form-control mt-2 border-0 border-bottom border-black rounded-0"
                 type={showpass ? "text" : "password"}
                 name="password"
                 value={user.password}
@@ -77,7 +80,7 @@ const Login = () => {
             </div>
 
             <button
-              className=" btn btn-primary text-white fs-5 w-100 ms-2 btn-outline-success"
+              className=" btn btn-primary text-white fs-5 w-100 mt-2 btn-outline-success"
               type="submit"
             >
               Login
@@ -85,7 +88,7 @@ const Login = () => {
           </form>
           <button
             onClick={() => navigate("/forgotpassword")}
-            className=" btn btn-danger text-white fs-5 w-100 ms-2 mt-5 btn-outline-success"
+            className=" btn btn-danger text-white fs-5 w-100 mt-2 mt-5 btn-outline-success"
           >
             Forgot password?
           </button>

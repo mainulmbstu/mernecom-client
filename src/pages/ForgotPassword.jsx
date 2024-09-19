@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Layout from "../components/Layout";
 
 const ForgotPassword = () => {
   const [user, setUser] = useState({ email: "", answer: "", newPassword:'' });
@@ -40,51 +41,55 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className=" d-flex justify-content-center my-auto">
-      <div className=" w-50 text-center shadow">
-        <h2>Login form</h2>
-        <form onSubmit={submitted} action="">
-          <input
-            onChange={inputHandle}
-            className=" form-control m-2"
-            type="email"
-            name="email"
-            value={user.email}
-            placeholder="email"
-            required
-          />
-          <input
-            onChange={inputHandle}
-            className=" form-control m-2"
-            type="text"
-            name="answer"
-            value={user.answer}
-            placeholder="Type your answer during registration"
-            required
-          />
-          <input
-            onChange={inputHandle}
-            className=" form-control m-2"
-            type="password"
-            name="newPassword"
-            value={user.newPassword}
-            placeholder="Type your new password"
-            required
-          />
-          <p>
-            Passwod must be minimum eight and maximum 16 characters, at least
-            one uppercase letter, one lowercase letter, one number and one
-            special character (@$!%*#?&):
-          </p>
-          <button
-            className=" btn btn-primary text-white fs-5 w-100 ms-2 btn-outline-success"
-            type="submit"
-          >
-            Reset
-          </button>
-        </form>
+    <Layout title={'Forgot password'}>
+      <div className=" d-flex flex-column justify-content-center border" style={{ height:'90vh'}}>
+        <div className=" col-md-3 mx-auto bg-dark text-white p-3">
+          <div className="text-center shadow">
+            <h4>Reset Password form</h4>
+            <form onSubmit={submitted} action="">
+              <input
+                onChange={inputHandle}
+                className=" form-control mt-2"
+                type="email"
+                name="email"
+                value={user.email}
+                placeholder="email"
+                required
+              />
+              <input
+                onChange={inputHandle}
+                className=" form-control mt-2"
+                type="text"
+                name="answer"
+                value={user.answer}
+                placeholder="Type your answer during registration"
+                required
+              />
+              <input
+                onChange={inputHandle}
+                className=" form-control mt-2"
+                type="password"
+                name="newPassword"
+                value={user.newPassword}
+                placeholder="Type your new password"
+                required
+              />
+              <p>
+                Passwod must be minimum eight and maximum 16 characters, at least
+                one uppercase letter, one lowercase letter, one number and one
+                special character (@$!%*#?&):
+              </p>
+              <button
+                className=" btn btn-primary text-white fs-5 w-100 mt-2 btn-outline-success"
+                type="submit"
+              >
+                Reset
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
