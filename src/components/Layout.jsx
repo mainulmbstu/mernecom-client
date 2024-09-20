@@ -1,7 +1,13 @@
+/* eslint-disable react/prop-types */
 import { Helmet } from "react-helmet";
 
-// eslint-disable-next-line react/prop-types
-const Layout = ({children, title, description, keyword, author }) => {
+const Layout = ({
+  children,
+  title = "Ecommerce",
+  description = "mern stack project",
+  keyword = "mern, node, react, vite, mongoose, mongoDB, express",
+  author = "Mainul Hasan",
+}) => {
   return (
     <div>
       <Helmet>
@@ -16,12 +22,7 @@ const Layout = ({children, title, description, keyword, author }) => {
   );
 };
 
-Layout.defaultProps = {
-  title: 'Ecommerce app',
-  description: 'mern stack project',
-  keyword: 'mern, node, react, vite, mongoose, mongoDB, express',
-  author:'Mainul Hasan'
-}
+
 
 
 

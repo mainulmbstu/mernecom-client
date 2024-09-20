@@ -72,7 +72,7 @@ const SearchContextProvider = ({ children }) => {
     }
 
   };
-  
+  //=================================================
   let submitHandlerScroll = async (page) => {
     try {
       setLoading(true);
@@ -87,7 +87,6 @@ const SearchContextProvider = ({ children }) => {
         }
       );
       setLoading(false);
-      console.log(data)
       setPage(page+1)
       setResults([...results,...data.products]);
     } catch (error) {

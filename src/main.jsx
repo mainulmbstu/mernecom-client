@@ -9,7 +9,7 @@ import { AuthContextProvider } from "./context/AuthContext.jsx";
 import { SearchContextProvider } from "./context/SearchContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <AuthContextProvider>
       <SearchContextProvider>
         <App />
@@ -21,5 +21,5 @@ createRoot(document.getElementById("root")).render(
         />
       </SearchContextProvider>
     </AuthContextProvider>
-  </StrictMode>
+  // </StrictMode>
 );

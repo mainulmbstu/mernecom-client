@@ -20,6 +20,7 @@ const AdminOrders = () => {
   ]);
   let [loading, setLoading] = useState(false);
   let { token, userInfo } = useAuth();
+
   //============================================================
   let [page, setPage] = useState(1);
   let [total, setTotal] = useState(0);
@@ -89,6 +90,46 @@ const AdminOrders = () => {
     adminOrders?.reduce((previous, current) => {
       return previous + current.total;
     }, 0);
+  //=============================================
+  let [searchVal, setSearchVal] = useState("");
+  let [searchPage, setSearchPage] = useState(1);
+
+    let searchAdminOrders = async (searchPage=1) => {
+      try {
+        if (!searchVal) return;
+        setLoading(true);
+        let { data } = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/admin/order-search`,
+          {
+            params: {
+              keyword: searchVal,
+              page: searchPage,
+              size: 8,
+            },
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setLoading(false);
+
+        setTotal(data.total);
+        searchPage === 1
+          ? setAdminOrders(data?.searchOrders)
+          : setAdminOrders([...adminOrders, ...data.searchOrders]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+useEffect(() => {
+  if (searchVal) searchAdminOrders();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [searchVal]);
+  
+  useEffect(() => {
+    setSearchPage(1);
+  }, [searchVal]);
+
+
   //===============================================================
   return (
     <Layout title={"Admin orders"}>
@@ -108,11 +149,36 @@ const AdminOrders = () => {
           </div>
         </div>
         <div className=" col-md-9 px-2">
+          <div className=" d-flex mt-2">
+            <div className="col-md-4">
+              <input
+                className=" form-control"
+                type="text"
+                value={searchVal}
+                required
+                placeholder="search by email, phone or status"
+                onChange={(e) => setSearchVal(e.target.value)}
+              />
+            </div>
+            <button
+              onClick={()=> searchAdminOrders(1)}
+              className="btn btn-success ms-2"
+            >
+              Search Order
+            </button>
+          </div>
           <div className="row ">
             {loading && <Loading />}
             <InfiniteScroll
               dataLength={adminOrders.length}
-              next={getAdminOrders}
+              next={
+                !searchVal
+                  ? getAdminOrders
+                  : () => {
+                      setSearchPage(searchPage + 1);
+                      searchAdminOrders(searchPage + 1);
+                    }
+              }
               hasMore={adminOrders.length < total}
               loader={<h1>Loading...</h1>}
               endMessage={<h4 className=" text-center">All items loaded</h4>}
@@ -196,7 +262,14 @@ const AdminOrders = () => {
             {adminOrders.length < total ? (
               <>
                 <button
-                  onClick={() => getAdminOrders()}
+                  onClick={() => {
+                    if (!searchVal) {
+                      getAdminOrders();
+                    } else {
+                      setSearchPage(searchPage + 1);
+                      searchAdminOrders(searchPage + 1);
+                    }
+                  }}
                   className="btn btn-primary my-3 px-3 mx-auto"
                   disabled={loading}
                 >

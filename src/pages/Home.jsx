@@ -33,19 +33,16 @@ const Home = () => {
     }
     setCheckedCat(all);
   };
-  // let checkedArr = products.filter((item) =>
-  //   checkedCat?.includes(item.category._id)
-  // );
-  // let newArr = checkedCat.length === 0 ? products : checkedArr;
+
   //==============  filter ====================================
-  const [filterProducts, setFilterProducts] = useState([]);
   const [filterPage, setFilterPage] = useState(1);
   let [total, setTotal] = useState(0);
 
-  // let finalProducts=[]
-  // filterProducts.length ? finalProducts = [...filterProducts] : finalProducts = [...products]
+  useEffect(() => {
+   setFilterPage(1)
+ }, [checkedCat, priceCat]);
 
-  let getProductFilterClick = async () => {
+  let getProductFilter = async (filterPage=1) => {
     try {
       setLoading(true);
       let { data } = await axios.post(
@@ -60,43 +57,15 @@ const Home = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
+      setLoading(false);
       if (!data.success) {
         return toast.error(data.msg);
       }
-      // setFilterPage(filterPage + 1)
       setTotal(data.total);
-      setFilterPage(filterPage + 1);
-      setProducts([...products, ...data.products]);
-      setFilterProducts(data.products);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  let getProductFilter = async () => {
-    try {
-      setLoading(true);
-      let { data } = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/products/product-filter`,
-        {
-          checkedCat,
-          priceCat,
-          pageOrSize: {
-            page: 1,
-            size: 4,
-          },
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      if (!data.success) {
-        return toast.error(data.msg);
-      }
-      // setFilterPage(filterPage + 1)
-      setTotal(data.total);
-      setFilterPage(2);
-      setProducts(data.products);
-      setLoading(false);
+      // setFilterPage(2);
+        filterPage === 1
+          ? setProducts(data?.products)
+          : setProducts([...products, ...data.products]);
     } catch (error) {
       console.log(error);
     }
@@ -251,7 +220,10 @@ const Home = () => {
             next={
               !checkedCat.length && !priceCat.length
                 ? getProducts
-                : getProductFilterClick
+                : () => {
+                  setFilterPage(filterPage + 1);
+                  getProductFilter(filterPage + 1);
+                }
             }
             hasMore={products.length < total}
             loader={<h1>Loading...</h1>}
@@ -324,7 +296,8 @@ const Home = () => {
                   if (!checkedCat.length && !priceCat.length) {
                     getProducts();
                   } else {
-                    getProductFilterClick();
+                    setFilterPage(filterPage+1)
+                    getProductFilter(filterPage+1);
                   }
                 }}
                 className="btn btn-primary my-3 px-3 mx-auto"

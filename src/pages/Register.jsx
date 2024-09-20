@@ -24,17 +24,20 @@ const Register = () => {
 
   let submitted = async (e) => {
     e.preventDefault();
+    let regExpn = /[A-Za-z. ]{3,50}$/;
+    if (!regExpn.test(user.name)) {
+      // return setMsg("Password not valid");
+      return alert("Name is not valid");
+    }
     let regExp =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,16}$/;
     if (!regExp.test(user.password)) {
       // return setMsg("Password not valid");
       return alert("Password is not valid");
     }
-    let regExpName =
-      /^(?=.*[a-z])(?=.*[A-Z])[A-Za-z]{3}$/;
-    if (!regExpName.test(user.name)) {
-      // return setMsg("Password not valid");
-      return alert("Name must be minimum 3 characters");
+
+    if (user?.phone?.length<11) {
+      return alert("Mobile number must be 11 digits");
     }
 
     try {

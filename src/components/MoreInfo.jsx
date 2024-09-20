@@ -111,7 +111,7 @@ const MoreInfo = () => {
                   <div className="card h-100">
                     <img
                       src={`${item?.picture?.secure_url}`}
-                      className=" card-img-top"
+                      className=" card-img-top" width={500} height={500}
                       alt="image"
                     />
                     <div className="card-body">
