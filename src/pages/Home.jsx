@@ -170,30 +170,39 @@ const Home = () => {
             <div className=" d-flex flex-column">
               <div>
                 <input
-                  onChange={() => setPriceCat([1, 20])}
+                  onChange={() => setPriceCat([1, 5000])}
                   type="radio"
                   name="kkk"
                   id="one"
                 />
-                <label htmlFor="one">1-20</label>
+                <label htmlFor="one">1-5000</label>
               </div>
               <div>
                 <input
-                  onChange={() => setPriceCat([21, 40])}
+                  onChange={() => setPriceCat([5001, 10000])}
                   type="radio"
                   name="kkk"
                   id="two"
                 />
-                <label htmlFor="two">21-40</label>
+                <label htmlFor="two">5001-10000</label>
               </div>
               <div>
                 <input
-                  onChange={() => setPriceCat([41, 60])}
+                  onChange={() => setPriceCat([10001, 15000])}
                   type="radio"
                   name="kkk"
                   id="three"
                 />
-                <label htmlFor="three">41-60</label>
+                <label htmlFor="three">10001-15000</label>
+              </div>
+              <div>
+                <input
+                  onChange={() => setPriceCat([15001, 999999999])}
+                  type="radio"
+                  name="kkk"
+                  id="three"
+                />
+                <label htmlFor="three">15001-Above</label>
               </div>
             </div>
           </div>
