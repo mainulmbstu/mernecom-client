@@ -26,6 +26,7 @@ const AdminOrders = () => {
   let [total, setTotal] = useState(0);
 
   let getAdminOrders = async () => {
+          window.scrollTo(0, 0);
     try {
       setLoading(true);
       let { data } = await axios.get(
@@ -38,7 +39,6 @@ const AdminOrders = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      // let data = await res.json()
       setPage(page + 1);
       setTotal(data.total);
       setAdminOrders([...adminOrders, ...data.orderList]);
@@ -92,9 +92,10 @@ const AdminOrders = () => {
     }, 0);
   //=============================================
   let [searchVal, setSearchVal] = useState("");
-  let [searchPage, setSearchPage] = useState(1);
+  // let [page, setPage] = useState(1);
 
-    let searchAdminOrders = async (searchPage=1) => {
+  let getSearchAdminOrders = async (e, page = 1) => {
+      e.preventDefault()
       try {
         if (!searchVal) return;
         setLoading(true);
@@ -103,7 +104,7 @@ const AdminOrders = () => {
           {
             params: {
               keyword: searchVal,
-              page: searchPage,
+              page: page,
               size: 8,
             },
             headers: { Authorization: `Bearer ${token}` },
@@ -112,7 +113,7 @@ const AdminOrders = () => {
         setLoading(false);
 
         setTotal(data.total);
-        searchPage === 1
+        page === 1
           ? setAdminOrders(data?.searchOrders)
           : setAdminOrders([...adminOrders, ...data.searchOrders]);
       } catch (error) {
@@ -120,13 +121,15 @@ const AdminOrders = () => {
       }
     };
   
-useEffect(() => {
-  if (searchVal) searchAdminOrders();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [searchVal]);
+// useEffect(() => {
+//   if (searchVal) getSearchAdminOrders();
+//   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [searchVal]);
+  
+  // work when input tag is not in form tag
   
   useEffect(() => {
-    setSearchPage(1);
+    setPage(1);
   }, [searchVal]);
 
 
@@ -151,17 +154,19 @@ useEffect(() => {
         <div className=" col-md-9 px-2">
           <div className=" d-flex mt-2">
             <div className="col-md-4">
-              <input
-                className=" form-control"
-                type="text"
-                value={searchVal}
-                required
-                placeholder="search by email, phone or status"
-                onChange={(e) => setSearchVal(e.target.value)}
-              />
+              <form onSubmit={getSearchAdminOrders}>
+                <input
+                  className=" form-control"
+                  type="text"
+                  value={searchVal}
+                  required
+                  placeholder="search by email, phone or status"
+                  onChange={(e) => setSearchVal(e.target.value)}
+                />
+              </form>
             </div>
             <button
-              onClick={()=> searchAdminOrders(1)}
+              onClick={(e) => getSearchAdminOrders(e,1)}
               className="btn btn-success ms-2"
             >
               Search Order
@@ -175,8 +180,8 @@ useEffect(() => {
                 !searchVal
                   ? getAdminOrders
                   : () => {
-                      setSearchPage(searchPage + 1);
-                      searchAdminOrders(searchPage + 1);
+                      setPage(page + 1);
+                      getSearchAdminOrders(page + 1);
                     }
               }
               hasMore={adminOrders.length < total}
@@ -266,8 +271,8 @@ useEffect(() => {
                     if (!searchVal) {
                       getAdminOrders();
                     } else {
-                      setSearchPage(searchPage + 1);
-                      searchAdminOrders(searchPage + 1);
+                      setPage(page + 1);
+                      getSearchAdminOrders(page + 1);
                     }
                   }}
                   className="btn btn-primary my-3 px-3 mx-auto"

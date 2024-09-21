@@ -29,10 +29,10 @@ const MoreInfo = () => {
     }
   };
   useEffect(() => {
-    // if (moreInfo.length < 1) return;
+    // if (!moreInfo) return;
     getMoreInfo();
   }, [params]);
-
+//=============================================
   let getSimilarProducts = async () => {
     try {
       setLoading(true);

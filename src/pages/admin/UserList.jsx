@@ -3,12 +3,14 @@ import { useAuth } from "../../context/AuthContext";
 import AdminMenu from "./AdminMenu";
 import Layout from "../../components/Layout";
 import Loading from "../../components/Loading";
+import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const UserList = () => {
   let [adminUsers, setAdminUsers] = useState([]);
   let [okdel, setOkdel] = useState(true);
   let { token, userInfo } = useAuth();
-//====================================================
+  //====================================================
   let roleHandle = async (value, id) => {
     if (id === userInfo._id) {
       return alert("You cannot update yourself");
@@ -30,29 +32,76 @@ const UserList = () => {
   };
   //============================================================
   let [loading, setLoading] = useState(false);
-  let getUserList = async () => {
+  let [page, setPage] = useState(1);
+  let [total, setTotal] = useState(0);
+
+  let getAdminUsers = async () => {
     try {
-      setLoading(true)
-       if (token && userInfo.role) {
-        let res= await fetch(`${import.meta.env.VITE_BASE_URL}/admin/user-list`, {
-           method: "GET",
-           headers: { Authorization: `Bearer ${token}` },
-         })
-           let data= await res.json()
-           setAdminUsers(data)
-      }
-      setLoading(false)
+      setLoading(true);
+      let { data } = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/admin/user-list`,
+        {
+          params: {
+            page: page,
+            size: 4,
+          },
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setPage(page + 1);
+      setTotal(data.total);
+      setAdminUsers([...adminUsers, ...data.userList]);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
-
-  }
+  };
 
   useEffect(() => {
-    if (token && userInfo.role) getUserList()
+    if (token && userInfo.role) getAdminUsers();
   }, [token, okdel, userInfo.role]);
-  
-//================================================
+
+  //=============================================
+  let [searchVal, setSearchVal] = useState("");
+  // let [page, setPage] = useState(1);
+
+  let getSearchAdminUser = async (e, page = 1) => {
+e.preventDefault()
+    try {
+      if (!searchVal) return;
+      setLoading(true);
+      let { data } = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/admin/user-search`,
+        {
+          params: {
+            keyword: searchVal,
+            page: page,
+            size: 8,
+          },
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setLoading(false);
+
+      setTotal(data.total);
+      page === 1
+        ? setAdminUsers(data?.searchUser)
+        : setAdminUsers([...adminUsers, ...data.searchUser]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // useEffect(() => {
+  //   if (searchVal) getSearchAdminUser();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [searchVal]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchVal]);
+
+  //================================================
   let deletefn = async (id) => {
     if (id === userInfo._id) {
       return alert("You cannot delete yourself");
@@ -66,6 +115,7 @@ const UserList = () => {
     await alert(data.msg);
   };
 
+
   return (
     <Layout title={"User list"}>
       <div className="row ">
@@ -73,32 +123,70 @@ const UserList = () => {
           <div className="card p-2">
             <AdminMenu />
           </div>
+          <h3>
+            Total users ({adminUsers?.length} of {total})
+          </h3>
         </div>
         <div className=" col-md-9 p-2">
           <div className="card p-2">
-            <h3>Total users ({adminUsers?.length}) </h3>
+            <div className=" d-flex my-2">
+              <div className="col-md-4">
+                <form onSubmit={getSearchAdminUser}>
+                  <input
+                    className=" form-control"
+                    type="text"
+                    value={searchVal}
+                    required
+                    placeholder="search user by email or phone"
+                    onChange={(e) => setSearchVal(e.target.value)}
+                  />
+                </form>
+              </div>
+              <button
+                type=" submit"
+                onClick={(e) => getSearchAdminUser(e,1)}
+                className="btn btn-success ms-2"
+              >
+                Search user
+              </button>
+            </div>
             {loading && <Loading />}
-            <div className=" border">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">SL</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">phone</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Delete</th>
-                  </tr>
-                </thead>
-                <tbody>
-                 {adminUsers?.length &&
+            <InfiniteScroll
+              dataLength={adminUsers?.length}
+              next={
+                !searchVal
+                  ? getAdminUsers
+                  : () => {
+                      setPage(page + 1);
+                      getSearchAdminUser(page + 1);
+                    }
+              }
+              hasMore={adminUsers?.length < total}
+              loader={<h1>Loading...</h1>}
+              endMessage={<h4 className=" text-center">All items loaded</h4>}
+            >
+              <div className=" border">
+                <table className="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">SL</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Phone</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Address</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {adminUsers?.length &&
                       adminUsers.map((item, index) => {
                         return (
                           <tr key={item._id}>
                             <td>{index + 1}</td>
                             <td>{item.name}</td>
                             <td>{item.email}</td>
+                            <td>{item.phone}</td>
                             <td>
                               <select
                                 onChange={(e) =>
@@ -114,7 +202,6 @@ const UserList = () => {
                                 <option value={1}>Admin</option>
                               </select>
                             </td>
-                            <td>{item.phone}</td>
                             <td>{item.address}</td>
                             <td>
                               <button
@@ -126,13 +213,35 @@ const UserList = () => {
                             </td>
                           </tr>
                         );
-                      })
-                    }
-                </tbody>
-              </table>
-            </div>
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            </InfiniteScroll>
           </div>
         </div>
+      </div>
+      <div className="d-flex">
+        {adminUsers?.length < total ? (
+          <>
+            <button
+              onClick={() => {
+                if (!searchVal) {
+                  getAdminUsers();
+                } else {
+                  setPage(page + 1);
+                  getSearchAdminUser(page + 1);
+                }
+              }}
+              className="btn btn-primary my-3 px-3 mx-auto"
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "Load More"}
+            </button>
+          </>
+        ) : (
+          ""
+        )}
       </div>
     </Layout>
   );
