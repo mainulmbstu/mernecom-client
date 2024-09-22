@@ -52,7 +52,7 @@ const CreateProduct = () => {
   let getSearchAdminProducts = async (e, page = 1) => {
     e && e.preventDefault();
     try {
-      // if (!searchVal) return;
+      if (!searchVal) return;
       setLoading(true);
       let { data } = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/admin/product-search`,

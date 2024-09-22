@@ -36,7 +36,7 @@ const UserList = () => {
   let [total, setTotal] = useState(0);
 
   let getAdminUsers = async () => {
-     page === 1 && window.scrollTo(0, 0);
+    page === 1 && window.scrollTo(0, 0);
     try {
       setLoading(true);
       let { data } = await axios.get(
@@ -67,9 +67,9 @@ const UserList = () => {
   // let [page, setPage] = useState(1);
 
   let getSearchAdminUser = async (e, page = 1) => {
-e.preventDefault()
+    e.preventDefault();
     try {
-      // if (!searchVal) return;
+      if (!searchVal) return;
       setLoading(true);
       let { data } = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/admin/user-search`,
@@ -110,7 +110,6 @@ e.preventDefault()
     setOkdel((prev) => !prev);
     await alert(data.msg);
   };
-
 
   return (
     <Layout title={"User list"}>
