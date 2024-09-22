@@ -11,6 +11,7 @@ const Login = () => {
   let navigate = useNavigate();
   let location = useLocation();
   const [showpass, setShowPass] = useState(false);
+    let [loading, setLoading] = useState(false);
 
   let inputHandle = (e) => {
     let { name, value } = e.target;
@@ -20,6 +21,7 @@ const Login = () => {
   let submitted = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       let res = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -35,6 +37,7 @@ const Login = () => {
       } else {
         toast.error(data.msg);
       }
+      setLoading(false);
     } catch (error) {
       console.log("login", error);
     }
@@ -82,8 +85,9 @@ const Login = () => {
             <button
               className=" btn btn-primary text-white fs-5 w-100 mt-2 btn-outline-success"
               type="submit"
+              disabled={loading}
             >
-              Login
+              {loading?'SIGNING IN':'SIGN IN'}
             </button>
           </form>
           <button

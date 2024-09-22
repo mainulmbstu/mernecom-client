@@ -5,7 +5,9 @@ import Layout from "../components/Layout";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
-    const [showpass, setShowPass] = useState(false);
+  const [showpass, setShowPass] = useState(false);
+      let [loading, setLoading] = useState(false);
+
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -41,6 +43,7 @@ const Register = () => {
     }
 
     try {
+      setLoading(true);
       let res = await fetch(`${import.meta.env.VITE_BASE_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -55,6 +58,7 @@ const Register = () => {
       } else {
         toast.error(data.msg);
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -145,9 +149,10 @@ const Register = () => {
               {/* <p className=' text-danger'>{msg} </p> */}
               <button
                 className=" btn btn-primary text-white fs-5 w-100 mt-2 btn-outline-success"
-                type="submit"
+              type="submit"
+              disabled={loading}
               >
-                Register
+                {loading?'REGISTERING':'REGISTER'}
               </button>
             </form>
 

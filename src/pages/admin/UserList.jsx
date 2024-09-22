@@ -36,6 +36,7 @@ const UserList = () => {
   let [total, setTotal] = useState(0);
 
   let getAdminUsers = async () => {
+     page === 1 && window.scrollTo(0, 0);
     try {
       setLoading(true);
       let { data } = await axios.get(
@@ -43,7 +44,7 @@ const UserList = () => {
         {
           params: {
             page: page,
-            size: 4,
+            size: 8,
           },
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -68,7 +69,7 @@ const UserList = () => {
   let getSearchAdminUser = async (e, page = 1) => {
 e.preventDefault()
     try {
-      if (!searchVal) return;
+      // if (!searchVal) return;
       setLoading(true);
       let { data } = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/admin/user-search`,
@@ -91,11 +92,6 @@ e.preventDefault()
       console.log(error);
     }
   };
-
-  // useEffect(() => {
-  //   if (searchVal) getSearchAdminUser();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [searchVal]);
 
   useEffect(() => {
     setPage(1);
@@ -131,24 +127,27 @@ e.preventDefault()
           <div className="card p-2">
             <div className=" d-flex my-2">
               <div className="col-md-4">
-                <form onSubmit={getSearchAdminUser}>
+                <form
+                  className="d-flex"
+                  role="search"
+                  onSubmit={getSearchAdminUser}
+                >
                   <input
-                    className=" form-control"
-                    type="text"
-                    value={searchVal}
-                    required
+                    className="form-control me-2"
+                    type="search"
                     placeholder="search user by email or phone"
+                    aria-label="Search"
+                    value={searchVal}
                     onChange={(e) => setSearchVal(e.target.value)}
                   />
+                  <button
+                    className="btn btn-success btn-outline-black"
+                    type="submit"
+                  >
+                    Search
+                  </button>
                 </form>
               </div>
-              <button
-                type=" submit"
-                onClick={(e) => getSearchAdminUser(e,1)}
-                className="btn btn-success ms-2"
-              >
-                Search user
-              </button>
             </div>
             {loading && <Loading />}
             <InfiniteScroll

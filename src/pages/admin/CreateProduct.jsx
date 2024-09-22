@@ -47,6 +47,40 @@ const CreateProduct = () => {
     getProducts();
   }, []);
   //======================================================
+  let [searchVal, setSearchVal] = useState("");
+
+  let getSearchAdminProducts = async (e, page = 1) => {
+    e && e.preventDefault();
+    try {
+      // if (!searchVal) return;
+      setLoading(true);
+      let { data } = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/admin/product-search`,
+        {
+          params: {
+            keyword: searchVal,
+            page: page,
+            size: 8,
+          },
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setLoading(false);
+
+      setTotal(data.total);
+      page === 1
+        ? setProducts(data?.searchProduct)
+        : setProducts([...products, ...data.searchProduct]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchVal]);
+
+  //===================================================
   let [delItem, setDelItem] = useState('');
 
   let deleteItem = async (id) => {
@@ -82,7 +116,9 @@ const CreateProduct = () => {
           <div className=" card p-2">
             <div className="">
               <div className=" d-flex justify-content-between mb-3">
-                <h3>Product List ({products?.length}) </h3>
+                <h3>
+                  Product List ({products?.length} of {total}){" "}
+                </h3>
 
                 <div>
                   <button
@@ -96,11 +132,44 @@ const CreateProduct = () => {
                   <CreateProductModal />
                 </div>
               </div>
+
+              <div className=" d-flex my-2">
+                <div className="col-md-4">
+                  <form
+                    className="d-flex"
+                    role="search"
+                    onSubmit={getSearchAdminProducts}
+                  >
+                    <input
+                      className="form-control me-2"
+                      type="search"
+                      placeholder="Product Name"
+                      aria-label="Search"
+                      value={searchVal}
+                      onChange={(e) => setSearchVal(e.target.value)}
+                    />
+                    <button
+                      className="btn btn-success btn-outline-black"
+                      type="submit"
+                    >
+                      Search
+                    </button>
+                  </form>
+                </div>
+              </div>
+
               <div className=" border">
                 {loading && <Loading />}
                 <InfiniteScroll
                   dataLength={products.length}
-                  next={getProducts}
+                  next={
+                    !searchVal
+                      ? getProducts
+                      : (e) => {
+                          setPage(page + 1);
+                          getSearchAdminProducts(e, page + 1);
+                        }
+                  }
                   hasMore={products.length < total}
                   loader={<h1>Loading...</h1>}
                   endMessage={
@@ -186,16 +255,23 @@ const CreateProduct = () => {
                     </tbody>
                   </table>
                 </InfiniteScroll>
-                <DeleteModal value={ {func:deleteItem, item:delItem}} />
+                <DeleteModal value={{ func: deleteItem, item: delItem }} />
               </div>
             </div>
           </div>
         </div>
         <div className="d-flex">
-          {products.length < total ? (
+          {products?.length < total ? (
             <>
               <button
-                onClick={() => getProducts()}
+                onClick={
+                  !searchVal
+                    ? getProducts
+                    : (e) => {
+                        setPage(page + 1);
+                        getSearchAdminProducts(e, page + 1);
+                      }
+                }
                 className="btn btn-primary my-3 px-3 mx-auto"
                 disabled={loading}
               >

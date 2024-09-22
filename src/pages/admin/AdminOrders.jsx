@@ -26,7 +26,7 @@ const AdminOrders = () => {
   let [total, setTotal] = useState(0);
 
   let getAdminOrders = async () => {
-          window.scrollTo(0, 0);
+         page===1 && window.scrollTo(0, 0);
     try {
       setLoading(true);
       let { data } = await axios.get(
@@ -95,7 +95,7 @@ const AdminOrders = () => {
   // let [page, setPage] = useState(1);
 
   let getSearchAdminOrders = async (e, page = 1) => {
-      e.preventDefault()
+      e && e.preventDefault()
       try {
         if (!searchVal) return;
         setLoading(true);
@@ -166,7 +166,7 @@ const AdminOrders = () => {
               </form>
             </div>
             <button
-              onClick={(e) => getSearchAdminOrders(e,1)}
+              onClick={(e) => getSearchAdminOrders(e, 1)}
               className="btn btn-success ms-2"
             >
               Search Order
@@ -179,9 +179,9 @@ const AdminOrders = () => {
               next={
                 !searchVal
                   ? getAdminOrders
-                  : () => {
+                  : (e) => {
                       setPage(page + 1);
-                      getSearchAdminOrders(page + 1);
+                      getSearchAdminOrders(e, page + 1);
                     }
               }
               hasMore={adminOrders.length < total}
@@ -267,14 +267,14 @@ const AdminOrders = () => {
             {adminOrders.length < total ? (
               <>
                 <button
-                  onClick={() => {
-                    if (!searchVal) {
-                      getAdminOrders();
-                    } else {
-                      setPage(page + 1);
-                      getSearchAdminOrders(page + 1);
-                    }
-                  }}
+                  onClick={
+                    !searchVal
+                      ? getAdminOrders
+                      : (e) => {
+                          setPage(page + 1);
+                          getSearchAdminOrders(e, page + 1);
+                        }
+                  }
                   className="btn btn-primary my-3 px-3 mx-auto"
                   disabled={loading}
                 >

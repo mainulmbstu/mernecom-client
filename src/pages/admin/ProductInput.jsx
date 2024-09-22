@@ -5,12 +5,11 @@ import axios from "axios";
 import Layout from "../../components/Layout";
 
 const ProductInput = () => {
-
   let [loading, setLoading] = useState(false);
   const [inputVal, setInputVal] = useState({
     name: "",
     description: "",
-    category:'kkkjk',
+    category: "",
     price: "",
     quantity: "",
     picture: "",
@@ -22,7 +21,7 @@ const ProductInput = () => {
     let { name, value } = e.target;
     setInputVal((prev) => ({ ...prev, [name]: value }));
   };
-//=================================================
+  //=================================================
   let productSubmit = async (e) => {
     e.preventDefault();
 
@@ -47,24 +46,23 @@ const ProductInput = () => {
           },
         }
       );
+      setLoading(false);
       if (data.success) {
         toast.success(data.msg);
         setInputVal({
           name: "",
           description: "",
-          category: '',
+          category: "",
           price: "",
           quantity: "",
           picture: "",
           shipping: "",
         });
         setLoading(false);
-        // getProducts();
-        window.location.reload()
+        window.location.reload();
       } else {
         toast.error(data.msg);
       }
-
     } catch (error) {
       console.log({ msg: "error from create product", error });
     }
@@ -72,33 +70,32 @@ const ProductInput = () => {
 
   //=============================================================
   return (
-    <Layout title={'Create product'}>
-      
-    <div className="row  ">
-      {/* <div className="col-md-3 p-2">
+    <Layout title={"Create product"}>
+      <div className="row  ">
+        {/* <div className="col-md-3 p-2">
         <div className="card p-2">
           <AdminMenu />
         </div>
       </div> */}
-      <div className=" p-2">
-        <div className="card p-2">
-          <div className=" border">
-            <form
-              onSubmit={productSubmit}
-              className="px-4"
-              encType="multipart/form-data"
-            >
-              <input
-                onChange={inputHandle}
-                className=" form-control mb-2"
-                type="text"
-                name="name"
-                value={inputVal.name}
-                placeholder="Enter product name"
-                required
-              />
+        <div className=" p-2">
+          <div className="card p-2">
+            <div className=" border">
+              <form
+                onSubmit={productSubmit}
+                className="px-4"
+                encType="multipart/form-data"
+              >
+                <input
+                  onChange={inputHandle}
+                  className=" form-control mb-2"
+                  type="text"
+                  name="name"
+                  value={inputVal.name}
+                  placeholder="Enter product name"
+                  required
+                />
 
-              {/* <div className="input-group mb-3">
+                {/* <div className="input-group mb-3">
                 <label className="input-group-text" htmlFor="category">
                   Category
                 </label>
@@ -124,148 +121,154 @@ const ProductInput = () => {
                 </select>
               </div>  */}
 
-              <div className="mb-2">
+                <div className="mb-2">
+                  <input
+                    className="form-control"
+                    list="categoryList"
+                    type={"text"}
+                    placeholder="Select category"
+                    required
+                    onChange={(e) => {
+                      let cat = category.filter(
+                        (item) => item.slug === e.target.value
+                      );
+                      setInputVal((prev) => ({
+                        ...prev,
+                        category: cat[0]?._id,
+                      }));
+                    }}
+                  />
+                  <datalist id="categoryList">
+                    {category?.length &&
+                      category.map((item) => {
+                        return (
+                          <option key={item._id} value={item.slug}></option>
+                        );
+                      })}
+                  </datalist>
+                </div>
+
                 <input
-                  className="form-control"
-                  list="categoryList"
-                  type={"text"}
-                  placeholder="Select category"
-                  required
-                  onChange={(e) => {
-                    let cat = category.filter(
-                      (item) => item.slug === e.target.value
-                    );
-                    setInputVal((prev) => ({ ...prev, category: cat[0]?._id }));
-                  }}
-                />
-                <datalist id="categoryList">
-                  {category?.length && category.map((item) => {
-                    return <option key={item._id} value={item.slug}></option>;
-                  })}
-                </datalist>
-              </div>
-
-              <input
-                onChange={inputHandle}
-                className=" form-control mb-2"
-                type="number"
-                name="price"
-                value={inputVal.price}
-                placeholder="Enter price"
-                required
-              />
-
-              <input
-                onChange={inputHandle}
-                className=" form-control mb-2"
-                type="number"
-                name="quantity"
-                value={inputVal.quantity}
-                placeholder="Enter quantity"
-                required
-              />
-
-              <div className="input-group mb-3">
-                <label className="input-group-text" htmlFor="shipping">
-                  Shipping
-                </label>
-                <select
-                  name="shipping"
-                  onChange={(e) => {
-                    return setInputVal((prev) => ({
-                      ...prev,
-                      shipping: e.target.value,
-                    }));
-                  }}
-                  className="form-select"
-                  id="shipping"
-                >
-                  {/* <option selected>Choose...</option> */}
-                  <option value={0}>No</option>
-                  <option value={1}>Yes</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="pic" className="btn">
-                  Upload product image
-                </label>
-                <input
+                  onChange={inputHandle}
                   className=" form-control mb-2"
-                  id="pic"
-                  type="file"
-                  name="picture"
-                  accept="image/*"
-                  onChange={(e) => {
-                    inputHandle({
-                      target: { name: "picture", value: e.target.files[0] },
-                    });
-                  }}
+                  type="number"
+                  name="price"
+                  value={inputVal.price}
+                  placeholder="Enter price"
+                  required
                 />
-              </div>
-              <div className="mb-4 ms-2">
-                {inputVal.picture && (
-                  <div>
-                    <img
-                      src={URL.createObjectURL(inputVal.picture)}
-                      alt="image"
-                      className="img img-responsive"
-                      height={"100px"}
-                    />
-                  </div>
-                )}
-              </div>
 
-              <textarea
-                onChange={inputHandle}
-                className=" form-control mb-2"
-                type="text"
-                rows="4"
-                name="description"
-                value={inputVal.description}
-                placeholder="Enter product description"
-                required
-              />
-              <div className=" d-flex justify-content-end">
-                <button
-                  type="button"
-                  className="btn  btn-danger text-white fs-5 w-25 ms-2 btn-outline-dark"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
+                <input
+                  onChange={inputHandle}
+                  className=" form-control mb-2"
+                  type="number"
+                  name="quantity"
+                  value={inputVal.quantity}
+                  placeholder="Enter quantity"
+                  required
+                />
 
-                {loading ? (
-                  <>
-                    <button
-                      className="btn btn-primary w-50 fs-5 ms-2"
-                      type="button"
-                      disabled
-                    >
-                      <span
-                        className="spinner-grow spinner-grow-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Uploadin data...
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      className=" btn  btn-primary text-white fs-5 w-50 ms-2 btn-outline-dark"
-                      type="submit"
-                    >
-                      Create Product
-                    </button>
-                  </>
-                )}
-              </div>
-            </form>
+                <div className="input-group mb-3">
+                  <label className="input-group-text" htmlFor="shipping">
+                    Shipping
+                  </label>
+                  <select
+                    name="shipping"
+                    onChange={(e) => {
+                      return setInputVal((prev) => ({
+                        ...prev,
+                        shipping: e.target.value,
+                      }));
+                    }}
+                    className="form-select"
+                    id="shipping"
+                  >
+                    {/* <option selected>Choose...</option> */}
+                    <option value={0}>No</option>
+                    <option value={1}>Yes</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="pic" className="btn">
+                    Upload product image
+                  </label>
+                  <input
+                    className=" form-control mb-2"
+                    id="pic"
+                    type="file"
+                    name="picture"
+                    accept="image/*"
+                    onChange={(e) => {
+                      inputHandle({
+                        target: { name: "picture", value: e.target.files[0] },
+                      });
+                    }}
+                  />
+                </div>
+                <div className="mb-4 ms-2">
+                  {inputVal.picture && (
+                    <div>
+                      <img
+                        src={URL.createObjectURL(inputVal.picture)}
+                        alt="image"
+                        className="img img-responsive"
+                        height={"100px"}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <textarea
+                  onChange={inputHandle}
+                  className=" form-control mb-2"
+                  type="text"
+                  rows="4"
+                  name="description"
+                  value={inputVal.description}
+                  placeholder="Enter product description"
+                  required
+                />
+                <div className=" d-flex justify-content-end">
+                  <button
+                    type="button"
+                    className="btn  btn-danger text-white fs-5 w-25 ms-2 btn-outline-dark"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+
+                  {loading ? (
+                    <>
+                      <button
+                        className="btn btn-primary w-50 fs-5 ms-2"
+                        type="button"
+                        disabled
+                      >
+                        <span
+                          className="spinner-grow spinner-grow-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Uploadin data...
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className=" btn  btn-primary text-white fs-5 w-50 ms-2 btn-outline-dark"
+                        type="submit"
+                      >
+                        Create Product
+                      </button>
+                    </>
+                  )}
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </Layout>
   );
 };

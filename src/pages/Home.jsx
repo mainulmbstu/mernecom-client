@@ -200,9 +200,9 @@ const Home = () => {
                   onChange={() => setPriceCat([15001, 999999999])}
                   type="radio"
                   name="kkk"
-                  id="three"
+                  id="four"
                 />
-                <label htmlFor="three">15001-Above</label>
+                <label htmlFor="four">15001-Above</label>
               </div>
             </div>
           </div>
