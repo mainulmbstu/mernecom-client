@@ -35,7 +35,7 @@ export const CartPage = () => {
   let total =
     cart?.length &&
     cart?.reduce((previous, current) => {
-      return previous + current.price * amount[current._id];
+      return previous + current?.price * amount[current?._id];
     }, 0);
 
   let removeCartItem = (id) => {
