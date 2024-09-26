@@ -40,6 +40,7 @@ const SearchContextProvider = ({ children }) => {
     getSimilarProducts();
   }, [moreInfo]);
 
+  const [amount, setAmount] = useState();
   const [cart, setCart] = useState([]);
   useEffect(() => {
     let storageCart = localStorage.getItem('cart')
@@ -115,7 +116,9 @@ const SearchContextProvider = ({ children }) => {
         total,
         page,
         submitHandlerScroll,
-        loading
+        loading,
+        amount,
+        setAmount,
       }}
     >
       {children}

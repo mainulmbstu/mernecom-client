@@ -200,7 +200,7 @@ const AdminOrders = () => {
                             <th scope="col">User-email</th>
                             <th scope="col">User-Address</th>
                             <th scope="col">Payment</th>
-                            <th scope="col">Qnty</th>
+                            <th scope="col">Item</th>
                             <th scope="col">Total Price</th>
                             <th scope="col">Time</th>
                           </tr>
@@ -249,9 +249,14 @@ const AdminOrders = () => {
                                 </div>
                                 <div className=" col-8 d-flex flex-column">
                                   <div>
-                                    <h5>Name: {p?.name} </h5>
+                                    <h5>
+                                      Name: {p?.name}- Price: {p?.price}
+                                    </h5>
                                     <p>Category: {p?.category?.name} </p>
-                                    <p>Price: {p?.price} </p>
+                                    <p>
+                                      {`Qnty: ${item?.amount[p?._id]}, Sub-Total: 
+                                      ${p.price * item?.amount[p?._id]}`}
+                                    </p>
                                   </div>
                                 </div>
                               </div>

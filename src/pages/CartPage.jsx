@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Layout from "../components/Layout";
 import { useAuth } from "../context/AuthContext";
 import { useSearch } from "../context/SearchContext";
@@ -5,8 +6,21 @@ import { useNavigate } from "react-router-dom";
 
 export const CartPage = () => {
   let { token, userInfo } = useAuth();
-  let { cart, setCart } = useSearch();
+  let { cart, setCart, amount, setAmount } = useSearch();
   let navigate = useNavigate();
+
+  let amo = {};
+  cart.length && cart.map((item) => {
+    amo[item._id] = (amo[item._id] || 0) + 1;
+  });
+
+  useEffect(() => {
+    setAmount(amo);
+  }, [cart]);
+
+  let amountHandle = (id, amt) => {
+    setAmount({ ...amount, [id]: amount[id] + amt });
+  }
 
   // let totalPrice = () => {
   //   try {
@@ -18,9 +32,11 @@ export const CartPage = () => {
   //   }
   // };
 
-let total=cart?.length && cart?.reduce((previous, current) => {
-  return previous + current.price
-}, 0);
+  let total =
+    cart?.length &&
+    cart?.reduce((previous, current) => {
+      return previous + current.price * amount[current._id];
+    }, 0);
 
   let removeCartItem = (id) => {
     try {
@@ -43,7 +59,7 @@ let total=cart?.length && cart?.reduce((previous, current) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ cart }),
+          body: JSON.stringify({ cart, amount }),
         }
       );
       let data = await res.json();
@@ -69,41 +85,58 @@ let total=cart?.length && cart?.reduce((previous, current) => {
         <hr />
         <div className="row mt-5">
           <div className="col-md-8 mt-0">
-            {cart?.length && cart.map((item, i) => {
-              return (
-                <div key={i} className="row border p-1 mb-2">
-                  <div className=" col-md-4 ">
-                    <img
-                      src={`${item?.picture?.secure_url}`}
-                      className=" w-100"
-                      height={200}
-                      alt="image"
-                    />
-                  </div>
-                  <div className=" col-md-8">
-                    <div className=" d-flex flex-column h-100">
-                      <div>
-                        <h5>Name: {item?.name} </h5>
-                        <p className="m-0">Product ID: {item?._id} </p>
-                        <p className="m-0">Category: {item?.category?.name} </p>
-                        <p className="m-0">Price: {item?.price} </p>
-                        <p className="m-0">
-                          Description: {item?.description.substring(0, 13)}{" "}
-                        </p>
-                      </div>
-                      <div className=" mt-auto">
-                        <button
-                          onClick={() => removeCartItem(item._id)}
-                          className="btn btn-danger mb-2"
-                        >
-                          Remove
-                        </button>
+            {cart?.length &&
+              cart.map((item, i) => {
+                return (
+                  <div key={i} className="row border p-1 mb-2">
+                    <div className=" col-md-4 ">
+                      <img
+                        src={`${item?.picture?.secure_url}`}
+                        className=" w-100"
+                        height={200}
+                        alt="image"
+                      />
+                    </div>
+                    <div className=" col-md-8">
+                      <div className=" d-flex flex-column h-100">
+                        <div>
+                          <h5>Name: {item?.name} </h5>
+                          <p className="m-0">Product ID: {item?._id} </p>
+                          <p className="m-0">
+                            Category: {item?.category?.name}{" "}
+                          </p>
+                          <p className="m-0">Price: {item?.price} </p>
+                          <div>
+                            <button
+                              onClick={() => amountHandle(item._id, -1)}
+                              className=" px-3 me-3"
+                              disabled={amount[item._id]===1}
+                            >
+                              -
+                            </button>
+                            <span>{amount[item._id]} </span>
+                            <button
+                              onClick={() => amountHandle(item._id, 1)}
+                              className=" px-3 mx-3"
+                            >
+                              +
+                            </button>
+                          </div>
+                          Sub-total: BDT {item.price * amount[item._id]}
+                        </div>
+                        <div className=" mt-auto">
+                          <button
+                            onClick={() => removeCartItem(item._id)}
+                            className="btn btn-danger mb-2"
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
           <div className="col-md-4 text-center">
             <h4>Cart Summary</h4>

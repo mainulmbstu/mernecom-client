@@ -17,8 +17,6 @@ const Home = () => {
   let { category } = useStore();
   let { cart, setCart } = useSearch();
 
-  // let cat = () => {};
-
   const [checkedCat, setCheckedCat] = useState([]);
   const [priceCat, setPriceCat] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -277,6 +275,10 @@ const Home = () => {
                           </Link>
                           <button
                             onClick={() => {
+                              let cartIds = cart.map(it => it._id)
+                              if (cartIds.includes(item._id)) {
+                                return alert("Already added");
+                              }
                               setCart([...cart, item]);
                               localStorage.setItem(
                                 "cart",
