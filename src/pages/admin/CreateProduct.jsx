@@ -185,7 +185,8 @@ const CreateProduct = () => {
                         <th scope="col">Category</th>
                         <th scope="col">Price</th>
                         <th scope="col">Quantity</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Delete</th>
+                        <th scope="col">Update</th>
                       </tr>
                     </thead>
 
@@ -203,7 +204,7 @@ const CreateProduct = () => {
                                 />
                               </td>
                               <td>{item.name}</td>
-                              <td>{item.category?.slug}</td>
+                              <td>{item.category?.name}</td>
                               <td>{item.price}</td>
                               <td>{item.quantity}</td>
                               {/* <td>{"edit/update"}</td> */}
@@ -232,15 +233,18 @@ const CreateProduct = () => {
                                   )}
                                 </button>
 
-                                <button
-                                  onClick={() => setEditProduct(item)}
-                                  type="button"
-                                  className="btn btn-primary ms-2"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#editProduct"
-                                >
-                                  Details & Edit
-                                </button>
+                              </td>
+                                <td>
+                                  <button
+                                    onClick={() => setEditProduct(item)}
+                                    type="button"
+                                    className="btn btn-primary ms-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editProduct"
+                                  >
+                                    Details & Edit
+                                  </button>
+                                </td>
                                 <UpdateProductModal
                                   value={{
                                     editProduct,
@@ -248,7 +252,6 @@ const CreateProduct = () => {
                                     setEditProduct,
                                   }}
                                 />
-                              </td>
                             </tr>
                           );
                         })}

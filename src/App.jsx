@@ -19,14 +19,14 @@ import { AdminAuth } from "./components/routes/AdminAuth";
 import AdminPanel from "./pages/admin/AdminPanel";
 // import CreateCategory from "./pages/admin/CreateCategory";
 // import CreateProduct from "./pages/admin/CreateProduct";
-import UserList from "./pages/admin/UserList";
+// import UserList from "./pages/admin/UserList";
 import Profile from "./pages/user/Profile";
 // import Orders from "./pages/user/Orders";
 import ProductInput from "./pages/admin/ProductInput";
 import SearchResults from "./components/SearchResults";
 import MoreInfo from "./components/MoreInfo";
 import Category from "./pages/Category";
-import CartPage from "./pages/CartPage";
+// import CartPage from "./pages/CartPage";
 import AdminProfile from "./pages/admin/AdminProfile";
 import { lazy, Suspense } from "react";
 import PaymentSuccess from "./components/PaymentSuccess";
@@ -35,6 +35,8 @@ import PaymentFail from "./components/PaymentFail";
 import Layout from "./components/Layout";
 
 // let CreateProduct= lazy(()=>import('./pages/admin/CreateProduct'))
+let UserList = lazy(() => import("./pages/admin/UserList"));
+let CartPage = lazy(() => import("./pages/CartPage"));
 let CreateCategory= lazy(()=>import('./pages/admin/CreateCategory'))
 let Home = lazy(() => import('./pages/Home'))
 let AdminOrders = lazy(() => import("./pages/admin/AdminOrders"));

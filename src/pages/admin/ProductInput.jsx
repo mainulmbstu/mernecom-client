@@ -64,6 +64,7 @@ const ProductInput = () => {
         toast.error(data.msg);
       }
     } catch (error) {
+      alert("error from product create, refresh, check file type and size");
       console.log({ msg: "error from create product", error });
     }
   };
@@ -190,15 +191,15 @@ const ProductInput = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="pic" className="btn">
-                    Upload product image
+                  <label htmlFor="pic" className="">
+                    Upload product image (jpeg, jpg, png, webp, Max size- 1mb)
                   </label>
                   <input
                     className=" form-control mb-2"
                     id="pic"
                     type="file"
                     name="picture"
-                    accept="image/*"
+                    // accept="image/*"
                     onChange={(e) => {
                       inputHandle({
                         target: { name: "picture", value: e.target.files[0] },

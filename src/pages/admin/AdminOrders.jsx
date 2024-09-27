@@ -225,7 +225,7 @@ const AdminOrders = () => {
                             <td>{item?.user?.email} </td>
                             <td>{item?.user?.address} </td>
                             <td>
-                              {item?.payment?.status ? "Success" : "Failed"}{" "}
+                              {item?.payment?.status ? "Success" : "Failed"}
                             </td>
                             <td>{item?.products?.length} </td>
                             <td>{item?.total} </td>
@@ -236,7 +236,7 @@ const AdminOrders = () => {
                       {item?.products?.length &&
                         item?.products?.map((p, i) => {
                           return (
-                            <div key={i} className="row g-5">
+                            <div key={i} className="row g-5 mb-2">
                               <div className="row g-4">
                                 <div className=" col-4">
                                   <img
@@ -254,8 +254,8 @@ const AdminOrders = () => {
                                     </h5>
                                     <p>Category: {p?.category?.name} </p>
                                     <p>
-                                      {`Qnty: ${item?.amount[p?._id]}, Sub-Total: 
-                                      ${p.price * item?.amount[p?._id]}`}
+                                      {`Qnty: ${p?.amount}, Sub-Total: 
+                                      ${p.price * p?.amount}`}
                                     </p>
                                   </div>
                                 </div>

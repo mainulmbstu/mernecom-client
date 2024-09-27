@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Layout from "../components/Layout";
 import { useAuth } from "../context/AuthContext";
 import { useSearch } from "../context/SearchContext";
@@ -6,36 +5,27 @@ import { useNavigate } from "react-router-dom";
 
 export const CartPage = () => {
   let { token, userInfo } = useAuth();
-  let { cart, setCart, amount, setAmount } = useSearch();
+  let { cart, setCart } = useSearch();
   let navigate = useNavigate();
 
-  let amo = {};
-  cart.length && cart.map((item) => {
-    amo[item._id] = (amo[item._id] || 0) + 1;
-  });
 
-  useEffect(() => {
-    setAmount(amo);
-  }, [cart]);
+  let amountHandle = (id, d) => {
+    let ind = -1
+    cart?.forEach((data, index) => {
+      if (data._id === id)
+        ind = index;
+    })
 
-  let amountHandle = (id, amt) => {
-    setAmount({ ...amount, [id]: amount[id] + amt });
-  }
+    let tempArr = [...cart]
+    tempArr[ind].amount += d
+    setCart([...tempArr])
+      }
 
-  // let totalPrice = () => {
-  //   try {
-  //     let total = 0;
-  //     cart?.length && cart?.map((item) => (total += item?.price));
-  //     return total;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   let total =
     cart?.length &&
     cart?.reduce((previous, current) => {
-      return previous + current?.price * amount[current?._id];
+      return previous + current?.price*current.amount;
     }, 0);
 
   let removeCartItem = (id) => {
@@ -59,7 +49,7 @@ export const CartPage = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ cart, amount }),
+          body: JSON.stringify({ cart}),
         }
       );
       let data = await res.json();
@@ -110,11 +100,11 @@ export const CartPage = () => {
                             <button
                               onClick={() => amountHandle(item._id, -1)}
                               className=" px-3 me-3"
-                              disabled={amount[item._id]===1}
+                              disabled={item.amount===1}
                             >
                               -
                             </button>
-                            <span>{amount[item._id]} </span>
+                            <span>{item.amount} </span>
                             <button
                               onClick={() => amountHandle(item._id, 1)}
                               className=" px-3 mx-3"
@@ -122,7 +112,7 @@ export const CartPage = () => {
                               +
                             </button>
                           </div>
-                          Sub-total: BDT {item.price * amount[item._id]}
+                          Sub-total: BDT {item.price * item.amount}
                         </div>
                         <div className=" mt-auto">
                           <button

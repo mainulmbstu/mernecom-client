@@ -5,7 +5,6 @@ export const AuthContext = createContext();
 const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [userInfo, setUserInfo] = useState("");
-
   let storeToken = (token) => {
     setToken(token);
     return localStorage.setItem("token", token);
@@ -19,7 +18,14 @@ const AuthContextProvider = ({ children }) => {
        headers: { Authorization: `Bearer ${token}` },
      })
        .then((res) => res.json())
-       .then((data) => setUserInfo(data.userData))
+       .then((data) => {
+         if (data.userData === 'token expired') {
+           localStorage.removeItem('token')
+            setToken("");
+           setUserInfo('')
+          }
+          setUserInfo(data.userData)
+       })
        .catch((error) => console.log(error));
    }
 }
