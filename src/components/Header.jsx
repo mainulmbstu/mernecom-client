@@ -3,17 +3,19 @@ import { useAuth } from "./../context/AuthContext";
 import { toast } from "react-toastify";
 import SearchInput from "./SearchInput";
 import { useSearch } from "../context/SearchContext";
+import { useState } from "react";
 
 const Header = () => {
   let { token, setToken, userInfo, setUserInfo, category } = useAuth();
   // let sortedCategory = category?.length && category?.toSorted((a, b) => (a.name > b.name ? 1 : -1));
   let { cart } = useSearch();
-  let catCopy= [...category]
+  let catCopy = [...category];
   let sortedCategory = catCopy?.sort((a, b) => {
-    a = a.name.toLowerCase()
-    b = b.name.toLowerCase()
-    return a > b? 1 : -1
+    a = a.name.toLowerCase();
+    b = b.name.toLowerCase();
+    return a > b ? 1 : -1;
   });
+  const [show, setshow] = useState(false)
 
   let logoutHandle = () => {
     localStorage.removeItem("token");
@@ -35,6 +37,7 @@ const Header = () => {
           </div>
 
           <button
+            onClick={() => setshow(true)}
             className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
@@ -46,10 +49,22 @@ const Header = () => {
             <span className="navbar-toggler-icon" />
           </button>
 
-          <div className="collapse navbar-collapse " id="navbarNavDropdown">
+          <div
+            className={
+              show
+                ? "collapse navbar-collapse show"
+                : "collapse navbar-collapse"
+            }
+            id="navbarNavDropdown"
+          >
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <NavLink className="nav-link " aria-current="page" to="/">
+                <NavLink
+                  onClick={() => setshow(false)}
+                  className="nav-link "
+                  aria-current="page"
+                  to="/"
+                >
                   Home
                 </NavLink>
               </li>
@@ -72,6 +87,7 @@ const Header = () => {
                     sortedCategory?.map((item) => (
                       <li key={item?._id}>
                         <NavLink
+                          onClick={() => setshow(false)}
                           to={`products/category/${item?.slug}`}
                           className="dropdown-item"
                         >
@@ -110,6 +126,7 @@ const Header = () => {
                     >
                       <li>
                         <NavLink
+                          onClick={() => setshow(false)}
                           to={`dashboard/${userInfo?.role ? "admin" : "user"}`}
                           className="dropdown-item"
                         >
@@ -131,12 +148,20 @@ const Header = () => {
               ) : (
                 <>
                   <li className="nav-item">
-                    <NavLink className="nav-link" to="/login">
+                    <NavLink
+                      onClick={() => setshow(false)}
+                      className="nav-link"
+                      to="/login"
+                    >
                       Login
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <NavLink className="nav-link" to="/register">
+                    <NavLink
+                      onClick={() => setshow(false)}
+                      className="nav-link"
+                      to="/register"
+                    >
                       Register
                     </NavLink>
                   </li>
@@ -145,7 +170,11 @@ const Header = () => {
             </ul>
           </div>
           <div>
-            <NavLink className="nav-link position-relative" to="/cart">
+            <NavLink
+              onClick={() => setshow(false)}
+              className="nav-link position-relative"
+              to="/cart"
+            >
               Cart
               <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 {cart?.length}
