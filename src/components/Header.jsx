@@ -50,11 +50,7 @@ const Header = () => {
           </button>
 
           <div
-            className={
-              show
-                ? "collapse navbar-collapse show"
-                : "collapse navbar-collapse"
-            }
+            className={`collapse navbar-collapse ${show?'show':''}`}
             id="navbarNavDropdown"
           >
             <ul className="navbar-nav ms-auto">
