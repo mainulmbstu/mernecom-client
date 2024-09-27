@@ -45,7 +45,7 @@ let [page, setPage] = useState(1);
   return (
     <Layout title={`Category-${params.slug}`}>
       <div>
-        <div className="">
+        <div className="px-2">
           <h3 className=" text-capitalize">
             Category: {params.slug}({products?.length} of {total} )
           </h3>

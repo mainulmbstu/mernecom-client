@@ -59,7 +59,7 @@ const MoreInfo = () => {
 
   return (
     <Layout title={"More Information"}>
-      <div>
+      <div className="px-2">
         <div className="row g-3">
           <div className="row g-4 border">
             <h1 className=" text-center">Details of product</h1>
@@ -111,7 +111,7 @@ const MoreInfo = () => {
                   <div className="card h-100">
                     <img
                       src={`${item?.picture?.secure_url}`}
-                      className=" card-img-top" width={500} height={500}
+                      className=" card-img-top" width={200} height={200}
                       alt="image"
                     />
                     <div className="card-body">
