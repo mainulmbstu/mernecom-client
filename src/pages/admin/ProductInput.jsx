@@ -199,7 +199,7 @@ const ProductInput = () => {
                     id="pic"
                     type="file"
                     name="picture"
-                    // accept="image/*"
+                    accept="image/*"
                     onChange={(e) => {
                       inputHandle({
                         target: { name: "picture", value: e.target.files[0] },

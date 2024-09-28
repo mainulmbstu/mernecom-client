@@ -64,6 +64,16 @@ const Header = () => {
                   Home
                 </NavLink>
               </li>
+              <li className="nav-item">
+                <NavLink
+                  onClick={() => setshow(false)}
+                  className="nav-link "
+                  aria-current="page"
+                  to="/gallery"
+                >
+                  Gallery
+                </NavLink>
+              </li>
               <li className="nav-item dropdown">
                 <NavLink
                   className="nav-link dropdown-toggle "

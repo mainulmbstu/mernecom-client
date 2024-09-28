@@ -3,7 +3,6 @@ import useStore from "../hooks/useStore";
 import { Checkbox } from "antd";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { useSearch } from "../context/SearchContext";
 import Layout from "../components/Layout";
 import { LazyLoadImage } from "react-lazy-load-image-component";

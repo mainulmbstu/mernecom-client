@@ -33,6 +33,7 @@ import PaymentSuccess from "./components/PaymentSuccess";
 import PaymentFail from "./components/PaymentFail";
 // import AdminOrders from "./pages/admin/AdminOrders";
 import Layout from "./components/Layout";
+import Gallery from "./pages/user/Gallery";
 
 // let CreateProduct= lazy(()=>import('./pages/admin/CreateProduct'))
 let UserList = lazy(() => import("./pages/admin/UserList"));
@@ -67,6 +68,7 @@ const App = () => {
         <Suspense fallback={<h2>Loading...</h2>}>
           <Routes>
             <Route path="/" element=<Home /> />
+            <Route path="/gallery" element=<Gallery /> />
             <Route path="/products/search" element=<SearchResults /> />
             <Route path="/products/payment/success/:oid" element=<PaymentSuccess /> />
             <Route path="/products/payment/fail" element=<PaymentFail /> />
