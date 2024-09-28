@@ -15,6 +15,7 @@ const ProductInput = () => {
     picture: "",
     shipping: 0,
   });
+
   let { token, category } = useAuth();
   // console.log(inputVal);
   let inputHandle = (e) => {
