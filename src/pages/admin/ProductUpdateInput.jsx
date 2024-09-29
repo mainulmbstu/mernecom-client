@@ -5,7 +5,6 @@ import axios from "axios";
 import Layout from "../../components/Layout";
 
 const ProductUpdateInput = ({ value }) => {
-  let [loading, setLoading] = useState(false);
   let [trix, setTrix] = useState(true);
   const [inputVal, setInputVal] = useState({
     name: "",
@@ -16,7 +15,7 @@ const ProductUpdateInput = ({ value }) => {
     picture: "",
     shipping: "",
   });
-  let { token, category } = useAuth();
+  let { token, category, loading, setLoading } = useAuth();
   let { editProduct, getProducts, setEditProduct } = value;
 
   if (editProduct?.name && trix) {
@@ -36,7 +35,7 @@ const ProductUpdateInput = ({ value }) => {
     let { name, value } = e.target;
     setInputVal((prev) => ({ ...prev, [name]: value }));
   };
-
+//=======================================
   let productSubmit = async (e) => {
     e.preventDefault();
 
@@ -217,7 +216,7 @@ const ProductUpdateInput = ({ value }) => {
                 <div className=" d-flex justify-content-end">
                   <button
                     type="button"
-                    className="btn  btn-danger text-white fs-5 w-25 ms-2 btn-outline-dark"
+                    className="btn  btn-danger text-white fs-5 ms-2 btn-outline-dark"
                     data-bs-dismiss="modal"
                   >
                     Close
@@ -243,6 +242,7 @@ const ProductUpdateInput = ({ value }) => {
                       <button
                         className=" btn  btn-primary text-white fs-5 w-50 ms-2 btn-outline-dark"
                         type="submit"
+                        data-bs-dismiss="modal"
                       >
                         Update Product
                       </button>

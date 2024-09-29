@@ -15,56 +15,28 @@ const Gallery = () => {
   let { userInfo, token } = useAuth();
   const [inputVal, setInputVal] = useState([]);
 
-  let submitHandle = async (e) => {
-    e.preventDefault();
-    if(inputVal.length===0) return alert('select file')
-    let formdata = new FormData();
-    inputVal.length &&
-      inputVal.map((item) => formdata.append("picture", item));
-    console.log(formdata);
-    try {
-      setLoading(true);
-
-      let { data } = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/admin/gallery`,
-        formdata,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setLoading(false);
-      if (data.success) {
-        toast.success(data.msg);
-        window.location.reload();
-      } else {
-        toast.error(data.msg);
-      }
-    } catch (error) {
-      alert("error from gallery create, refresh, check file type and size");
-      console.log({ msg: "error from create gallery", error });
-    }
-  };
 //=============================================
   let getGallery = async () => {
     page === 1 && window.scrollTo(0, 0);
     try {
       setLoading(true);
-      let { data } = await axios.get(
+      let res = await fetch(
         `${import.meta.env.VITE_BASE_URL}/gallery`,
         {
-          params: {
-            page: page,
-            size: 8,
-          },
+          method:'GET'
+          // params: {
+          //   page: page,
+          //   size: 8,
+          // },
         }
       );
-      // console.log(gallery, data.total);
-      setPage(page + 1);
-      setTotal(data.total);
-      setGallery([...gallery, ...data.images]);
+      if (res.ok) {
+        let data = await res.json();
+        setTotal(data.total);
+        // setPage(page + 1);
+          setGallery(data.images);
+      }
+      
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -74,6 +46,38 @@ const Gallery = () => {
   useEffect(() => {
     getGallery();
   }, []);
+//===============================================
+ let submitHandle = async (e) => {
+   e.preventDefault();
+   if (inputVal.length === 0) return alert("select file");
+   let formdata = new FormData();
+   inputVal.length && inputVal.map((item) => formdata.append("picture", item));
+   try {
+     setLoading(true);
+
+     let { data } = await axios.post(
+       `${import.meta.env.VITE_BASE_URL}/admin/gallery`,
+       formdata,
+       {
+         headers: {
+           "Content-Type": "multipart/form-data",
+           Authorization: `Bearer ${token}`,
+         },
+       }
+     );
+     setLoading(false);
+     if (data.success) {
+       toast.success(data.msg);
+       //  window.location.reload();
+       getGallery()
+     } else {
+       toast.error(data.msg);
+     }
+   } catch (error) {
+     alert("error from gallery create, refresh, check file type and size");
+     console.log({ msg: "error from create gallery", error });
+   }
+ };
 
   return (
     <Layout title="Gallery">

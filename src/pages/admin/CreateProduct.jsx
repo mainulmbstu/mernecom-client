@@ -12,16 +12,15 @@ import DeleteModal from "../../components/DeleteModal";
 
 
 const CreateProduct = () => {
-  let { token,} = useAuth();
-  const [selectedItem, setSelectedItem] = useState([]);
+  let { token, loading, setLoading } = useAuth();
   const [editProduct, setEditProduct] = useState('');
   //=============================================================
   let [page, setPage] = useState(1);
   let [total, setTotal] = useState(0);
   let [products, setProducts] = useState([]);
-  let [loading, setLoading] = useState(false);
   
-  let getProducts = async () => {
+  let getProducts = async (page = 1) => {
+    page === 1 && window.scrollTo(0, 0);
     try {
       setLoading(true);
       let { data } = await axios.get(
@@ -34,9 +33,11 @@ const CreateProduct = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setPage(page + 1);
+      // setPage(page + 1);
       setTotal(data.total);
-      setProducts([...products, ...data.products]);
+      page===1?
+      setProducts(data.products)
+      :setProducts([...products, ...data.products]);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -122,6 +123,7 @@ const CreateProduct = () => {
 
                 <div>
                   <button
+                    onClick={()=>setPage(1)}
                     type="button"
                     className="btn btn-primary"
                     data-bs-toggle="modal"
@@ -129,7 +131,7 @@ const CreateProduct = () => {
                   >
                     Create Product
                   </button>
-                  <CreateProductModal />
+                  <CreateProductModal getProducts={getProducts} />
                 </div>
               </div>
 
@@ -164,9 +166,12 @@ const CreateProduct = () => {
                   dataLength={products.length}
                   next={
                     !searchVal
-                      ? getProducts
+                      ? () => {
+                        setPage(page + 1);
+                        getProducts(page + 1)
+                      }
                       : (e) => {
-                          setPage(page + 1);
+                        setPage(page + 1);
                           getSearchAdminProducts(e, page + 1);
                         }
                   }
@@ -210,13 +215,15 @@ const CreateProduct = () => {
                               {/* <td>{"edit/update"}</td> */}
                               <td>
                                 <button
-                                  onClick={() => setDelItem(item)}
+                                  onClick={() => {
+                                    setDelItem(item);
+                                  }}
                                   className="btn btn-danger"
                                   data-bs-toggle="modal"
                                   data-bs-target="#deleteCategory"
                                   disabled={loading}
                                 >
-                                  {loading && item._id === selectedItem._id ? (
+                                  {loading && item._id === delItem._id ? (
                                     <>
                                       <div
                                         className="spinner-border text-primary"
@@ -232,26 +239,25 @@ const CreateProduct = () => {
                                     <>Delete</>
                                   )}
                                 </button>
-
                               </td>
-                                <td>
-                                  <button
-                                    onClick={() => setEditProduct(item)}
-                                    type="button"
-                                    className="btn btn-primary ms-2"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editProduct"
-                                  >
-                                    Details & Edit
-                                  </button>
-                                </td>
-                                <UpdateProductModal
-                                  value={{
-                                    editProduct,
-                                    getProducts,
-                                    setEditProduct,
-                                  }}
-                                />
+                              <td>
+                                <button
+                                  onClick={() => setEditProduct(item)}
+                                  type="button"
+                                  className={`btn btn-primary ms-2 ${loading && 'bg-danger'}`}
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#editProduct"
+                                >
+                                  {loading?'Updating':'Details & Edit'}
+                                </button>
+                              </td>
+                              <UpdateProductModal
+                                value={{
+                                  editProduct,
+                                  getProducts,
+                                  setEditProduct,
+                                }}
+                              />
                             </tr>
                           );
                         })}
@@ -269,7 +275,10 @@ const CreateProduct = () => {
               <button
                 onClick={
                   !searchVal
-                    ? getProducts
+                    ? () => {
+                      setPage(page + 1)
+                      getProducts(page + 1)
+                    }
                     : (e) => {
                         setPage(page + 1);
                         getSearchAdminProducts(e, page + 1);

@@ -1,6 +1,6 @@
 import ProductInput from "./ProductInput";
 
-const CreateProductModal = () => {
+const CreateProductModal = ({ getProducts }) => {
   return (
     <div>
       <div>
@@ -39,7 +39,7 @@ const CreateProductModal = () => {
                 />
               </div>
               <div className="modal-body">
-                <ProductInput />
+                <ProductInput getProducts={getProducts} />
               </div>
             </div>
           </div>

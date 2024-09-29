@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Layout from "../../components/Layout";
 
-const ProductInput = () => {
+const ProductInput = ({ getProducts }) => {
   let [loading, setLoading] = useState(false);
   const [inputVal, setInputVal] = useState({
     name: "",
@@ -17,11 +17,11 @@ const ProductInput = () => {
   });
 
   let { token, category } = useAuth();
-  // console.log(inputVal);
   let inputHandle = (e) => {
     let { name, value } = e.target;
     setInputVal((prev) => ({ ...prev, [name]: value }));
   };
+
   //=================================================
   let productSubmit = async (e) => {
     e.preventDefault();
@@ -53,14 +53,15 @@ const ProductInput = () => {
         setInputVal({
           name: "",
           description: "",
-          category: "",
+          category: inputVal.category,
           price: "",
           quantity: "",
-          picture: "",
-          shipping: "",
+          picture: inputVal.picture,
+          shipping: 0,
         });
         setLoading(false);
-        window.location.reload();
+        // window.location.reload();
+        getProducts()
       } else {
         toast.error(data.msg);
       }

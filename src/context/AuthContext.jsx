@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [userInfo, setUserInfo] = useState("");
+  const [loading, setLoading] = useState(false);
   let storeToken = (token) => {
     setToken(token);
     return localStorage.setItem("token", token);
@@ -69,10 +70,8 @@ const AuthContextProvider = ({ children }) => {
         getUserInfo,
         category,
         getCategory,
-        // getEditData,
-        // editData,
-        // setEditData,
-
+        loading,
+        setLoading,
       }}
     >
       {children}
