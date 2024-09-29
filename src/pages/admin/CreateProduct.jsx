@@ -241,15 +241,35 @@ const CreateProduct = () => {
                                 </button>
                               </td>
                               <td>
-                                <button
-                                  onClick={() => setEditProduct(item)}
-                                  type="button"
-                                  className={`btn btn-primary ms-2 ${loading && 'bg-danger'}`}
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#editProduct"
-                                >
-                                  {loading?'Updating':'Details & Edit'}
-                                </button>
+                                {loading && item._id === editProduct._id ? (
+                                  <>
+                                    <button
+                                      className="btn btn-primary"
+                                      type="button"
+                                      disabled
+                                    >
+                                      <span
+                                        className="spinner-border spinner-border-sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                      />
+                                      Updating...
+                                    </button>
+                                  </>
+                                ) : (
+                                  <>
+                                    <button
+                                      onClick={() => setEditProduct(item)}
+                                      className="btn btn-primary"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#editProduct"
+                                      disabled={loading}
+                                      >
+                                        Details & Edit
+                                        
+                                    </button>
+                                  </>
+                                )}
                               </td>
                               <UpdateProductModal
                                 value={{
