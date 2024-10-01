@@ -38,7 +38,7 @@ const Profile = () => {
       return alert("Password is not valid");
     }
     try {
-      setLoading(false)
+      setLoading(true)
       let res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/update`, {
         method: "POST",
         headers: {
@@ -47,7 +47,7 @@ const Profile = () => {
         },
         body: JSON.stringify(user),
       });
-      setLoading(true);
+      setLoading(false);
       let data = await res.json();
       if (res.ok) {
         toast.success(data.msg);
