@@ -7,6 +7,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Register = () => {
   const [showpass, setShowPass] = useState(false);
       let [loading, setLoading] = useState(false);
+      let [OTP, setOTP] = useState('');
 
   const [user, setUser] = useState({
     name: "",
@@ -14,16 +15,54 @@ const Register = () => {
     password: "",
     phone: "",
     address: "",
-    answer: "",
+    regOTP:""
   });
-
   let navigate = useNavigate();
 
   let inputHandle = (e) => {
     let { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
   };
+//===================================
+  let getOTP = async (e) => {
+    e.preventDefault();
+    let regExpn = /[A-Za-z. ]{3,50}$/;
+    if (!regExpn.test(user.name)) {
+      // return setMsg("Password not valid");
+      return alert("Name is not valid");
+    }
+    let regExp =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,16}$/;
+    if (!regExp.test(user.password)) {
+      // return setMsg("Password not valid");
+      return alert("Password is not valid");
+    }
 
+    if (user?.phone?.length<11) {
+      return alert("Mobile number must be 11 digits");
+    }
+
+    try {
+      setLoading(true);
+      let res = await fetch(`${import.meta.env.VITE_BASE_URL}/getotp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+      setLoading(false);
+      let data = await res.json();
+      if (res.ok) {
+        setOTP(data.OTP)
+        alert(data.msg);
+      } else {
+        toast.error(data.msg);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+//===================================
   let submitted = async (e) => {
     e.preventDefault();
     let regExpn = /[A-Za-z. ]{3,50}$/;
@@ -77,7 +116,7 @@ const Register = () => {
         <div className=" text-center shadow bg-black text-white py-4 p-2 col-md-3 mx-auto">
 
             <h4 className=" text-uppercase">Registration form</h4>
-            <form onSubmit={submitted} action="">
+            <form onSubmit={OTP?submitted:getOTP} action="">
               <input
                 onChange={inputHandle}
                 className=" form-control mt-2"
@@ -136,17 +175,17 @@ const Register = () => {
                 placeholder="address"
                 required
               />
+            {
+              OTP && 
               <input
                 onChange={inputHandle}
                 className=" form-control mt-2"
                 type="text"
-                name="answer"
-                value={user.answer}
-                placeholder="What is your favorite game"
-                required
+                name="regOTP"
+                value={user.regOTP}
+                placeholder="OTP"
               />
-              <p>{user.answer && "Remember it for forgot password"} </p>
-              {/* <p className=' text-danger'>{msg} </p> */}
+            }
               <button
                 className=" btn btn-primary text-white fs-5 w-100 mt-2 btn-outline-success"
               type="submit"
