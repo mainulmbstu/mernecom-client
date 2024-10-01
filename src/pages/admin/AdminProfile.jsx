@@ -110,12 +110,10 @@ const AdminProfile = () => {
                     disabled
                   />
                   <label
-                    title={passHints}
                     className=" text-start ms-3"
                     htmlFor=""
                   >
-                    Password (If want to change): (Mouse over for password
-                    Hints)
+                    Password
                   </label>
                   <input
                     onChange={inputHandle}
@@ -125,6 +123,9 @@ const AdminProfile = () => {
                     value={user?.password}
                     placeholder="password"
                   />
+                  {
+                    <p>{user?.password && passHints} </p>
+                  }
                   <label className=" text-start ms-3" htmlFor="">
                     Phone:
                   </label>
