@@ -70,7 +70,7 @@ const Profile = () => {
       <div className=" col-md-9 p-2">
         <div className="card p-2">
           <div className=" d-flex justify-content-around my-auto ">
-            <div className=" shadow">
+            <div className=" col-md-6 shadow">
               <h2 className=" text-center">User Profile</h2>
               <form onSubmit={submitted} action="" className="p-3">
                 <label className=" text-start ms-3" htmlFor="">
