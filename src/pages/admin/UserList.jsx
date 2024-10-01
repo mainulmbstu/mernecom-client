@@ -36,7 +36,7 @@ const UserList = () => {
   let [page, setPage] = useState(1);
   let [total, setTotal] = useState(0);
 
-  let getAdminUsers = async () => {
+  let getAdminUsers = async (page=1) => {
     page === 1 && window.scrollTo(0, 0);
     try {
       setLoading(true);
@@ -50,9 +50,10 @@ const UserList = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setPage(page + 1);
       setTotal(data.total);
-      setAdminUsers([...adminUsers, ...data.userList]);
+      page === 1
+        ? setAdminUsers(data.userList)
+        : setAdminUsers([...adminUsers, ...data.userList]);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -110,6 +111,7 @@ const UserList = () => {
     });
     let data = await res.json();
     setOkdel((prev) => !prev);
+    getAdminUsers()
     await alert(data.msg);
   };
 
@@ -155,7 +157,10 @@ const UserList = () => {
               dataLength={adminUsers?.length}
               next={
                 !searchVal
-                  ? getAdminUsers
+                  ? () => {
+                      setPage(page + 1);
+                      getAdminUsers(page + 1);
+                    }
                   : () => {
                       setPage(page + 1);
                       getSearchAdminUser(page + 1);
@@ -206,6 +211,7 @@ const UserList = () => {
                             <td>
                               <button
                                 onClick={() => {
+                                  setPage(1)
                                   setDelItem(item);
                                 }}
                                 className="btn btn-danger"
@@ -247,7 +253,8 @@ const UserList = () => {
             <button
               onClick={() => {
                 if (!searchVal) {
-                  getAdminUsers();
+                  setPage(page + 1);
+                  getAdminUsers(page + 1);
                 } else {
                   setPage(page + 1);
                   getSearchAdminUser(page + 1);

@@ -12,7 +12,7 @@ import DeleteModal from "../../components/DeleteModal";
 
 
 const CreateProduct = () => {
-  let { token, loading, setLoading } = useAuth();
+  let { token,userInfo, loading, setLoading } = useAuth();
   const [editProduct, setEditProduct] = useState('');
   //=============================================================
   let [page, setPage] = useState(1);
@@ -33,7 +33,6 @@ const CreateProduct = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      // setPage(page + 1);
       setTotal(data.total);
       page===1?
       setProducts(data.products)
@@ -45,7 +44,7 @@ const CreateProduct = () => {
   };
 
   useEffect(() => {
-    getProducts();
+   if (token && userInfo.role) getProducts();
   }, []);
   //======================================================
   let [searchVal, setSearchVal] = useState("");
