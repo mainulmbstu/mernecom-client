@@ -39,12 +39,12 @@ const CreateProduct = () => {
       :setProducts([...products, ...data.products]);
       setLoading(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    getProducts();
+   if (token && userInfo.role) getProducts();
   }, []);
   //======================================================
   let [searchVal, setSearchVal] = useState("");
