@@ -44,7 +44,7 @@ const CreateProduct = () => {
   };
 
   useEffect(() => {
-   if (token && userInfo.role) getProducts();
+    getProducts();
   }, []);
   //======================================================
   let [searchVal, setSearchVal] = useState("");
