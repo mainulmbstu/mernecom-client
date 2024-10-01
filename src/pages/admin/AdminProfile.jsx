@@ -29,7 +29,7 @@ const AdminProfile = () => {
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  let passHints = `Passwod must be minimum 8 and maximum 16 characters, at least one uppercase letter, one lowercase letter, one number and one special character (@$!%*#?&)`;
+  let passHints = `Password must be minimum 8 and maximum 16 characters, at least one uppercase letter, one lowercase letter, one number and one special character (@$!%*#?&)`;
   let submitted = async (e) => {
     e.preventDefault();
     let regExp =
