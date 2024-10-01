@@ -39,7 +39,7 @@ const CreateProduct = () => {
       :setProducts([...products, ...data.products]);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   };
 
