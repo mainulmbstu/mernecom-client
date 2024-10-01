@@ -36,7 +36,7 @@ const AdminProfile = () => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,16}$/;
     if (user.password && !regExp.test(user.password)) {
       // return setMsg("Password not valid");
-      return alert("Password is not valid");
+      return alert("Password is not valid")
     }
     try {
       let res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/update`, {
