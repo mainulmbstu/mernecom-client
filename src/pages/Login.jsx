@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
@@ -42,6 +42,11 @@ const Login = () => {
       console.log("login", error);
     }
   };
+  let getFocus = useRef()
+  useEffect(() => {
+   getFocus.current.focus()
+  }, [])
+  
 
   return (
     <Layout title={"Login"}>
@@ -53,6 +58,7 @@ const Login = () => {
           <h2>LOGIN FORM</h2>
           <form onSubmit={submitted} action="">
             <input
+              ref={getFocus}
               onChange={inputHandle}
               className=" form-control mt-2 border-0 border-bottom border-black rounded-0"
               type="email"

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout";
@@ -54,6 +54,7 @@ const Register = () => {
       if (res.ok) {
         setOTP(data.OTP)
         alert(data.msg);
+        focusOTP.current.focus()
       } else {
         toast.error(data.msg);
       }
@@ -102,6 +103,11 @@ const Register = () => {
       console.log(error);
     }
   };
+    let focusName = useRef();
+    let focusOTP = useRef();
+    useEffect(() => {
+      focusName.current.focus();
+    }, []);
 
   let hints = `Password must be 8-16 characters, at least one uppercase
           letter, one lowercase letter, one number and one special character
@@ -114,70 +120,70 @@ const Register = () => {
         style={{ height: "90vh" }}
       >
         <div className=" text-center shadow bg-black text-white py-4 p-2 col-md-3 mx-auto">
-
-            <h4 className=" text-uppercase">Registration form</h4>
-            <form onSubmit={OTP?submitted:getOTP} action="">
+          <h4 className=" text-uppercase">Registration form</h4>
+          <form onSubmit={OTP ? submitted : getOTP} action="">
+            <input
+              ref={focusName}
+              onChange={inputHandle}
+              className=" form-control mt-2"
+              type="text"
+              name="name"
+              value={user.name}
+              placeholder="Full Name"
+              required
+            />
+            <p>{user.name && "Minimum 3 characters"} </p>
+            <input
+              onChange={inputHandle}
+              className=" form-control mt-2"
+              type="email"
+              name="email"
+              value={user.email}
+              placeholder="email"
+              required
+            />
+            <div className=" position-relative">
               <input
                 onChange={inputHandle}
-                className=" form-control mt-2"
-                type="text"
-                name="name"
-                value={user.name}
-                placeholder="Full Name"
+                className=" form-control mt-2 "
+                type={showpass ? "text" : "password"}
+                name="password"
+                value={user.password}
+                placeholder="password"
                 required
               />
-              <p>{user.name && "Minimum 3 characters"} </p>
-              <input
-                onChange={inputHandle}
-                className=" form-control mt-2"
-                type="email"
-                name="email"
-                value={user.email}
-                placeholder="email"
-                required
-              />
-              <div className=" position-relative">
-                <input
-                  onChange={inputHandle}
-                  className=" form-control mt-2 "
-                  type={showpass ? "text" : "password"}
-                  name="password"
-                  value={user.password}
-                  placeholder="password"
-                  required
-                />
-                <div className=" position-absolute">
-                  <Link onClick={() => setShowPass((prev) => !prev)}>
-                    {showpass ? (
-                      <FaEyeSlash className=" fs-2" />
-                    ) : (
-                      <FaEye className=" fs-2" />
-                    )}
-                  </Link>
-                </div>
+              <div className=" position-absolute">
+                <Link onClick={() => setShowPass((prev) => !prev)}>
+                  {showpass ? (
+                    <FaEyeSlash className=" fs-2" />
+                  ) : (
+                    <FaEye className=" fs-2" />
+                  )}
+                </Link>
               </div>
-              <p className="text-start ps-2">{user.password && hints} </p>
+            </div>
+            <p className="text-start ps-2">{user.password && hints} </p>
+            <input
+              onChange={inputHandle}
+              className=" form-control mt-2"
+              type="text"
+              name="phone"
+              value={user.phone}
+              placeholder="Phone number"
+              required
+            />
+            <input
+              onChange={inputHandle}
+              className=" form-control mt-2"
+              type="text"
+              name="address"
+              value={user.address}
+              placeholder="address"
+              required
+            />
+            {OTP && (
               <input
-                onChange={inputHandle}
-                className=" form-control mt-2"
-                type="text"
-                name="phone"
-                value={user.phone}
-                placeholder="Phone number"
-                required
-              />
-              <input
-                onChange={inputHandle}
-                className=" form-control mt-2"
-                type="text"
-                name="address"
-                value={user.address}
-                placeholder="address"
-                required
-              />
-            {
-              OTP && 
-              <input
+                ref={focusOTP}
                 onChange={inputHandle}
                 className=" form-control mt-2"
                 type="text"
@@ -185,16 +191,25 @@ const Register = () => {
                 value={user.regOTP}
                 placeholder="OTP"
               />
-            }
-              <button
-                className=" btn btn-primary text-white fs-5 w-100 mt-2 btn-outline-success"
+            )}
+            <button
+              className=" btn btn-primary text-white fs-5 w-100 mt-2 btn-outline-success"
               type="submit"
               disabled={loading}
-              >
-                {loading?'REGISTERING':'REGISTER'}
-              </button>
-            </form>
-
+            >
+              {loading ? "REGISTERING" : "REGISTER"}
+            </button>
+            {OTP &&
+            <button
+              onClick={getOTP}
+              className=" btn btn-success text-white fs-5 w-100 mt-2 btn-outline-success"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "RESENDING OTP" : "RESEND OTP"}
+            </button>
+            }
+          </form>
         </div>
       </div>
     </Layout>

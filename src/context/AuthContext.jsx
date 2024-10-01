@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 export const AuthContext = createContext();
 
@@ -31,7 +31,7 @@ const AuthContextProvider = ({ children }) => {
    }
 }
   useEffect(() => {
-   getUserInfo();
+   if(token) getUserInfo();
   }, [token]);
   //============== all category====================================
   const [category, setCategory] = useState([]);
@@ -58,6 +58,9 @@ const AuthContextProvider = ({ children }) => {
   //   let getEditData = (item) => {
   //     setEditData(item);
   // };
+  
+
+
   
 
   return (
