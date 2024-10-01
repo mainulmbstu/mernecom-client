@@ -45,7 +45,7 @@ const UserList = () => {
         {
           params: {
             page: page,
-            size: 8,
+            size: 10,
           },
           headers: { Authorization: `Bearer ${token}` },
         }
