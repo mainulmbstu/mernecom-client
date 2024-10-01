@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
 
 const Profile = () => {
-  let { userInfo, getUserInfo, token } = useAuth();
+  let { userInfo, getUserInfo, token, loading, setLoading } = useAuth();
   const [user, setUser] = useState({
     id: "",
     name: "",
@@ -27,8 +27,8 @@ const Profile = () => {
     let { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
   };
-
   let passHints = `Password must be minimum 8 and maximum 16 characters, at least one uppercase letter, one lowercase letter, one number and one special character (@$!%*#?&)`;
+
   let submitted = async (e) => {
     e.preventDefault();
     let regExp =
@@ -38,6 +38,7 @@ const Profile = () => {
       return alert("Password is not valid");
     }
     try {
+      setLoading(true)
       let res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/update`, {
         method: "POST",
         headers: {
@@ -46,7 +47,7 @@ const Profile = () => {
         },
         body: JSON.stringify(user),
       });
-
+      setLoading(true);
       let data = await res.json();
       if (res.ok) {
         toast.success(data.msg);
@@ -97,7 +98,7 @@ const Profile = () => {
                   placeholder="Full Name"
                 />
                 <label className=" text-start ms-3" htmlFor="">
-                  email::
+                  email:
                 </label>
                 <input
                   onChange={inputHandle}
@@ -109,7 +110,7 @@ const Profile = () => {
                   disabled
                 />
                 <label className=" text-start ms-3" htmlFor="">
-                  Password
+                  Password:
                 </label>
                 <input
                   onChange={inputHandle}
@@ -121,7 +122,7 @@ const Profile = () => {
                 />
                 {<p>{user?.password && passHints} </p>}
                 <label className=" text-start ms-3" htmlFor="">
-                  Phone::
+                  Phone:
                 </label>
                 <input
                   onChange={inputHandle}
@@ -132,7 +133,7 @@ const Profile = () => {
                   placeholder="Phone number"
                 />
                 <label className=" text-start ms-3" htmlFor="">
-                  Address::
+                  Address:
                 </label>
                 <input
                   onChange={inputHandle}
@@ -145,8 +146,9 @@ const Profile = () => {
                 <button
                   className=" btn btn-primary text-white fs-5 w-100 ms-2 btn-outline-success"
                   type="submit"
+                  disabled={loading}
                 >
-                  Update
+                  {loading?'Updating': 'Update'}
                 </button>
               </form>
             </div>
