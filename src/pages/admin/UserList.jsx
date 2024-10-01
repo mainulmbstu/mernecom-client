@@ -5,6 +5,7 @@ import Layout from "../../components/Layout";
 import Loading from "../../components/Loading";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
+import DeleteModal from "../../components/DeleteModal";
 
 const UserList = () => {
   let [adminUsers, setAdminUsers] = useState([]);
@@ -98,7 +99,8 @@ const UserList = () => {
   }, [searchVal]);
 
   //================================================
-  let deletefn = async (id) => {
+  let [delItem, setDelItem] = useState("");
+  let deleteItem = async (id) => {
     if (id === userInfo._id) {
       return alert("You cannot delete yourself");
     }
@@ -203,10 +205,29 @@ const UserList = () => {
                             <td>{item.address}</td>
                             <td>
                               <button
-                                onClick={() => deletefn(item._id)}
+                                onClick={() => {
+                                  setDelItem(item);
+                                }}
                                 className="btn btn-danger"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteCategory"
+                                disabled={loading}
                               >
-                                Delete
+                                {loading && item._id === delItem._id ? (
+                                  <>
+                                    <div
+                                      className="spinner-border text-primary"
+                                      role="status"
+                                      disabled
+                                    >
+                                      <span className="visually-hidden">
+                                        Loading...
+                                      </span>
+                                    </div>
+                                  </>
+                                ) : (
+                                  <>Delete</>
+                                )}
                               </button>
                             </td>
                           </tr>
@@ -217,6 +238,7 @@ const UserList = () => {
               </div>
             </InfiniteScroll>
           </div>
+          <DeleteModal value={{ func: deleteItem, item: delItem }} />
         </div>
       </div>
       <div className="d-flex">
