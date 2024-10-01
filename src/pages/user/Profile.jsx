@@ -28,7 +28,7 @@ const Profile = () => {
     setUser((prev) => ({ ...prev, [name]: value }));
   };
   let passHints = `Password must be minimum 8 and maximum 16 characters, at least one uppercase letter, one lowercase letter, one number and one special character (@$!%*#?&)`;
-
+//===========================================
   let submitted = async (e) => {
     e.preventDefault();
     let regExp =
@@ -38,7 +38,7 @@ const Profile = () => {
       return alert("Password is not valid");
     }
     try {
-      setLoading(true)
+      setLoading(false)
       let res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/update`, {
         method: "POST",
         headers: {
