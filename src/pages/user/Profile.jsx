@@ -108,12 +108,8 @@ const Profile = () => {
                   placeholder="email"
                   disabled
                 />
-                <label
-                  title={passHints}
-                  className=" text-start ms-3"
-                  htmlFor=""
-                >
-                  Password (If want to change): (Mouse over for password Hints)
+                <label className=" text-start ms-3" htmlFor="">
+                  Password
                 </label>
                 <input
                   onChange={inputHandle}
@@ -123,6 +119,7 @@ const Profile = () => {
                   value={user?.password}
                   placeholder="password"
                 />
+                {<p>{user?.password && passHints} </p>}
                 <label className=" text-start ms-3" htmlFor="">
                   Phone::
                 </label>
