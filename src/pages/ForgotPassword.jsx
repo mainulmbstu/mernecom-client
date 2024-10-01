@@ -1,57 +1,76 @@
 import { useState } from "react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout";
+import { useAuth } from "../context/AuthContext";
 
-const ForgotPassword = () => {
-  const [user, setUser] = useState({ email: "", answer: "", newPassword:'' });
+const UserVerified = () => {
+  const [user, setUser] = useState({ email: "" });
+  const [OTP, setOTP] = useState({ OTP: "" });
+  const [gotOTP, setgotOTP] = useState(false);
   let navigate = useNavigate();
-
-  let inputHandle = (e) => {
-    let { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
-  };
+  let { loading, setLoading } = useAuth();
 
   let submitted = async (e) => {
     e.preventDefault();
-    let regExp =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,16}$/;
-    if (!regExp.test(user.newPassword)) {
-      return alert("Password is not valid");
-    }
 
     try {
-      let res = await fetch(`${import.meta.env.VITE_BASE_URL}/Forgotpassword`, {
-        method: "PATCH",
+      setLoading(true);
+      let res = await fetch(`${import.meta.env.VITE_BASE_URL}/userVerified`, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
       });
-
+      setLoading(false);
       let data = await res.json();
       if (res.ok) {
         toast.success(data.msg);
-        setUser({ email: "", answer: "", newPassword: "" });
-        navigate("/login");
+        setgotOTP(true);
       } else {
         toast.error(data.msg);
       }
     } catch (error) {
-      console.log("ForgotPassword", error);
+      console.log("UserVerified", error);
+    }
+  };
+  //==================================================
+  let submitOTP = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      let res = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/OTPVerified/${user.email}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: user.email, OTP: OTP.OTP }),
+        }
+      );
+      setLoading(false);
+      let data = await res.json();
+      if (res.ok) {
+        navigate(`/resetnewpassword/${user.email}`);
+      } else {
+        toast.error(data.msg);
+      }
+    } catch (error) {
+      console.log("OTPVerified", error);
     }
   };
 
   return (
-    <Layout title={"Forgot password"}>
+    <Layout title={"Reset password"}>
       <div
         className=" d-flex flex-column justify-content-center border"
         style={{ height: "90vh" }}
       >
-        <div className=" col-md-3 mx-auto bg-dark text-white p-3">
+        <div className=" col-md-4 mx-auto bg-dark text-white p-3">
           <div className="text-center shadow">
             <h4>Reset Password form</h4>
             <form onSubmit={submitted} action="">
               <input
-                onChange={inputHandle}
+                onChange={(e) => setUser({ email: e.target.value })}
                 className=" form-control mt-2"
                 type="email"
                 name="email"
@@ -59,41 +78,44 @@ const ForgotPassword = () => {
                 placeholder="email"
                 required
               />
-              <input
-                onChange={inputHandle}
-                className=" form-control mt-2"
-                type="text"
-                name="answer"
-                value={user.answer}
-                placeholder="Type your answer during registration"
-                required
-              />
-              <input
-                onChange={inputHandle}
-                className=" form-control mt-2"
-                type="password"
-                name="newPassword"
-                value={user.newPassword}
-                placeholder="Type your new password"
-                required
-              />
-              <p>
-                Passwod must be minimum eight and maximum 16 characters, at
-                least one uppercase letter, one lowercase letter, one number and
-                one special character (@$!%*#?&):
-              </p>
+
               <button
                 className=" btn btn-primary text-white fs-5 w-100 mt-2 btn-outline-success"
                 type="submit"
+                disabled={loading}
               >
-                Reset
+                {loading ? "submitting" : "Send OTP"}
               </button>
             </form>
           </div>
+          {gotOTP && (
+            <div className="text-center shadow mt-3">
+              <h4>Input OTP</h4>
+              <form onSubmit={submitOTP} action="">
+                <input
+                  onChange={(e) => setOTP({ OTP: e.target.value })}
+                  className=" form-control mt-2"
+                  type="text"
+                  name="OTP"
+                  value={user.OTP}
+                  placeholder="OTP"
+                  required
+                />
+
+                <button
+                  className=" btn btn-primary text-white fs-5 w-100 mt-2 btn-outline-success"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? "Submitting" : "Submit"}
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </div>
     </Layout>
   );
 };
 
-export default ForgotPassword;
+export default UserVerified;

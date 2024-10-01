@@ -34,6 +34,8 @@ import PaymentFail from "./components/PaymentFail";
 // import AdminOrders from "./pages/admin/AdminOrders";
 import Layout from "./components/Layout";
 import Gallery from "./pages/user/Gallery";
+import ResetNewPassword from "./pages/user/ResetNewPassword";
+// import ResetNewPassword from "./pages/user/ResetNewPassword";
 
 // let CreateProduct= lazy(()=>import('./pages/admin/CreateProduct'))
 let UserList = lazy(() => import("./pages/admin/UserList"));
@@ -69,6 +71,8 @@ const App = () => {
           <Routes>
             <Route path="/" element=<Home /> />
             <Route path="/gallery" element=<Gallery /> />
+            <Route path="/resetnewpassword/:email" element=<ResetNewPassword /> />
+
             <Route path="/products/search" element=<SearchResults /> />
             <Route path="/products/payment/success/:oid" element=<PaymentSuccess /> />
             <Route path="/products/payment/fail" element=<PaymentFail /> />
