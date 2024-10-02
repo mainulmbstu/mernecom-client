@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useSearch } from "../context/SearchContext";
 import Layout from "./Layout";
 import Loading from "./Loading";
+import ReactImageMagnify from "react-image-magnify";
 
 const MoreInfo = () => {
   const [moreInfo, setMoreInfo] = useState("");
@@ -64,14 +65,30 @@ const MoreInfo = () => {
           <div className="row g-4 border">
             <h1 className=" text-center">Details of product</h1>
             <hr />
-            {loading && <Loading/>}
-            <div className=" col-md-6">
-              <img
-                src={`${moreInfo?.picture?.secure_url}`}
-                className=" img-thumbnail"
-                width={500}
-                alt="image"
-              />
+            {loading && <Loading />}
+            <div className=" col-md-6 pb-3 d-flex justify-content-center ">
+              <div>
+                <ReactImageMagnify
+                  {...{
+                    smallImage: {
+                      alt: "Product image",
+                      // isFluidWidth: true,
+                      src: `${moreInfo?.picture?.secure_url}`,
+                      width: 300,
+                      height: 400,
+                    },
+                    largeImage: {
+                      src: `${moreInfo?.picture?.secure_url}`,
+                      width: 1200,
+                      height: 1800,
+                    },
+                    enlargedImageContainerDimensions: {
+                      width: '300%',
+                      height: '100%',
+                    },
+                  }}
+                />
+              </div>
             </div>
             <div className=" col-md-6 d-flex flex-column">
               <div>
@@ -105,49 +122,55 @@ const MoreInfo = () => {
           <h4>Similar Products</h4>
           {/* {loading && <Loading/>} */}
           <div className="row g-3">
-            {similarProducts?.length && similarProducts?.map((item) => {
-              return (
-                <div key={item?._id} className="col-md-3  ">
-                  <div className="card h-100">
-                    <img
-                      src={`${item?.picture?.secure_url}`}
-                      className=" card-img-top" width={200} height={200}
-                      alt="image"
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">{item?.name}</h5>
-                      <div className="card-text">
-                        <p>Category: {item?.category?.name} </p>
-                        <p>Price: {item?.price} </p>
-                        <p>Available quantity: {item?.quantity} </p>
-                        <p>
-                          Description: {item?.description.substring(0, 8)} ....
-                        </p>
+            {similarProducts?.length &&
+              similarProducts?.map((item) => {
+                return (
+                  <div key={item?._id} className="col-md-3  ">
+                    <div className="card h-100">
+                      <img
+                        src={`${item?.picture?.secure_url}`}
+                        className=" card-img-top"
+                        width={200}
+                        height={200}
+                        alt="image"
+                      />
+                      <div className="card-body">
+                        <h5 className="card-title">{item?.name}</h5>
+                        <div className="card-text">
+                          <p>Category: {item?.category?.name} </p>
+                          <p>Price: {item?.price} </p>
+                          <p>Available quantity: {item?.quantity} </p>
+                          <p>
+                            Description: {item?.description.substring(0, 8)}{" "}
+                            ....
+                          </p>
+                        </div>
+                      </div>
+                      <div className=" d-flex justify-content-evenly">
+                        <Link to={`/products/more-info/${item._id}`}>
+                          <button className="btn btn-primary ">
+                            More info
+                          </button>
+                        </Link>
+
+                        <button
+                          onClick={() => {
+                            setCart([...cart, item]);
+                            localStorage.setItem(
+                              "cart",
+                              JSON.stringify([...cart, item])
+                            );
+                            toast.success(`${item.name} added to Cart`);
+                          }}
+                          className="btn btn-info mt-auto mb-1"
+                        >
+                          Add to cart
+                        </button>
                       </div>
                     </div>
-                    <div className=" d-flex justify-content-evenly">
-                      <Link to={`/products/more-info/${item._id}`}>
-                        <button className="btn btn-primary ">More info</button>
-                      </Link>
-
-                      <button
-                        onClick={() => {
-                          setCart([...cart, item]);
-                          localStorage.setItem(
-                            "cart",
-                            JSON.stringify([...cart, item])
-                          );
-                          toast.success(`${item.name} added to Cart`);
-                        }}
-                        className="btn btn-info mt-auto mb-1"
-                      >
-                        Add to cart
-                      </button>
-                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </div>
