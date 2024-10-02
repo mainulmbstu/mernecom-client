@@ -55,7 +55,7 @@ const MoreInfo = () => {
   };
   useEffect(() => {
     if (moreInfo.length < 1) return;
-    getSimilarProducts();
+    getSimilarProducts()
   }, [moreInfo]);
 
   return (
