@@ -12,10 +12,12 @@ const MoreInfo = () => {
   let params = useParams();
   let { cart, setCart } = useSearch();
   const [loading, setLoading] = useState(false);
+  const [img, setImg] = useState("");
+  console.log(moreInfo, img);
   //=================================
   let getMoreInfo = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       let res = await fetch(
         `${import.meta.env.VITE_BASE_URL}/products/more-info/${params.pid}`,
         {
@@ -25,6 +27,7 @@ const MoreInfo = () => {
       setLoading(false);
       let data = await res.json();
       setMoreInfo(data.products);
+      setImg(data.products[0]?.picture[0]?.secure_url);
     } catch (error) {
       console.log(error);
     }
@@ -33,7 +36,7 @@ const MoreInfo = () => {
     // if (!moreInfo) return;
     getMoreInfo();
   }, [params]);
-//=============================================
+  //=============================================
   let getSimilarProducts = async () => {
     try {
       setLoading(true);
@@ -67,26 +70,25 @@ const MoreInfo = () => {
             <hr />
             {loading && <Loading />}
             <div className=" col-md-3 pb-3 ">
-              {
-                moreInfo[0]?.picture?.map((item, i) => {
-                  return (
-                    <div className="text-center py-1" key={i}>
-                      <img
-                        src={`${item?.secure_url}`}
-                        alt="img"
-                        width={100}
-                        height={100}
-                        className="px-3"
-                      />
-                      
-                    </div>
-                  );
-                })
-              }
-              </div>
+              {moreInfo[0]?.picture?.map((item, i) => {
+                return (
+                  <div className="text-center py-1" key={i}>
+                    <img
+                      onMouseOver={() => setImg(item.secure_url)}
+                      style={{ cursor: "pointer" }}
+                      src={`${item?.secure_url}`}
+                      alt="img"
+                      width={100}
+                      height={100}
+                      className="px-3"
+                    />
+                  </div>
+                );
+              })}
+            </div>
             <div className=" col-md-4 pb-3 d-flex  justify-content-center ">
               <img
-                src={`${moreInfo[0]?.picture[0]?.secure_url}`}
+                src={img}
                 alt="image"
                 width={400}
                 height={500}
@@ -116,7 +118,7 @@ const MoreInfo = () => {
                 />
               </div> */}
             </div>
-            <div className=" col-md-5 d-flex flex-column">
+            <div className=" col-md-5 px-md-5">
               <div>
                 <h5>Name: {moreInfo[0]?.name} </h5>
                 <p>Product ID: {moreInfo[0]?._id} </p>
@@ -125,7 +127,7 @@ const MoreInfo = () => {
                 <p>Quqntity: {moreInfo[0]?.quantity} </p>
                 <p>Description: {moreInfo[0]?.description} </p>
               </div>
-              <div className=" mt-auto mb-3 w-100">
+              <div className=" my-3 w-100">
                 <button
                   onClick={() => {
                     setCart([...cart, moreInfo[0]]);
