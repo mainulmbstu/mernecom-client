@@ -240,7 +240,7 @@ const AdminOrders = () => {
                               <div className="row g-4">
                                 <div className=" col-4">
                                   <img
-                                    src={`${p?.picture?.secure_url}`}
+                                    src={`${p?.picture[0]?.secure_url}`}
                                     className=" ms-3"
                                     width={100}
                                     height={100}

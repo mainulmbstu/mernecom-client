@@ -7,12 +7,12 @@ import Loading from "./Loading";
 // import ReactImageMagnify from "react-image-magnify";
 
 const MoreInfo = () => {
-  const [moreInfo, setMoreInfo] = useState("");
+  const [moreInfo, setMoreInfo] = useState([]);
   const [similarProducts, setSimilarProducts] = useState([]);
   let params = useParams();
   let { cart, setCart } = useSearch();
   const [loading, setLoading] = useState(false);
-
+  //=================================
   let getMoreInfo = async () => {
     try {
       setLoading(true)
@@ -24,7 +24,7 @@ const MoreInfo = () => {
       );
       setLoading(false);
       let data = await res.json();
-      setMoreInfo(data.products[0]);
+      setMoreInfo(data.products);
     } catch (error) {
       console.log(error);
     }
@@ -39,8 +39,8 @@ const MoreInfo = () => {
       setLoading(true);
       let res = await fetch(
         `${import.meta.env.VITE_BASE_URL}/products/search/similar/${
-          moreInfo?._id
-        }/${moreInfo?.category?._id}`,
+          moreInfo[0]?._id
+        }/${moreInfo[0]?.category?._id}`,
         {
           method: "GET",
         }
@@ -54,7 +54,7 @@ const MoreInfo = () => {
     }
   };
   useEffect(() => {
-    if (moreInfo.length < 1) return;
+    // if (moreInfo.length < 1) return;
     getSimilarProducts();
   }, [moreInfo]);
 
@@ -66,9 +66,32 @@ const MoreInfo = () => {
             <h1 className=" text-center">Details of product</h1>
             <hr />
             {loading && <Loading />}
-            <div className=" col-md-6 pb-3 d-flex  justify-content-center ">
-
-                 <img src={`${moreInfo?.picture?.secure_url}`} alt="image" width={400} height={500} className="px-3" />
+            <div className=" col-md-3 pb-3 ">
+              {
+                moreInfo[0]?.picture?.map((item, i) => {
+                  return (
+                    <div className="text-center py-1" key={i}>
+                      <img
+                        src={`${item?.secure_url}`}
+                        alt="img"
+                        width={100}
+                        height={100}
+                        className="px-3"
+                      />
+                      
+                    </div>
+                  );
+                })
+              }
+              </div>
+            <div className=" col-md-4 pb-3 d-flex  justify-content-center ">
+              <img
+                src={`${moreInfo[0]?.picture[0]?.secure_url}`}
+                alt="image"
+                width={400}
+                height={500}
+                className="px-3"
+              />
 
               {/* <div>
                 <ReactImageMagnify
@@ -93,24 +116,24 @@ const MoreInfo = () => {
                 />
               </div> */}
             </div>
-            <div className=" col-md-6 d-flex flex-column">
+            <div className=" col-md-5 d-flex flex-column">
               <div>
-                <h5>Name: {moreInfo?.name} </h5>
-                <p>Product ID: {moreInfo?._id} </p>
-                <p>Category: {moreInfo?.category?.name} </p>
-                <p>Price: {moreInfo?.price} </p>
-                <p>Quqntity: {moreInfo?.quantity} </p>
-                <p>Description: {moreInfo?.description} </p>
+                <h5>Name: {moreInfo[0]?.name} </h5>
+                <p>Product ID: {moreInfo[0]?._id} </p>
+                <p>Category: {moreInfo[0]?.category?.name} </p>
+                <p>Price: {moreInfo[0]?.price} </p>
+                <p>Quqntity: {moreInfo[0]?.quantity} </p>
+                <p>Description: {moreInfo[0]?.description} </p>
               </div>
               <div className=" mt-auto mb-3 w-100">
                 <button
                   onClick={() => {
-                    setCart([...cart, moreInfo]);
+                    setCart([...cart, moreInfo[0]]);
                     localStorage.setItem(
                       "cart",
-                      JSON.stringify([...cart, moreInfo])
+                      JSON.stringify([...cart, moreInfo[0]])
                     );
-                    toast.success(`${moreInfo?.name} added to Cart`);
+                    toast.success(`${moreInfo[0]?.name} added to Cart`);
                   }}
                   className="btn btn-info mt-auto w-100"
                 >
@@ -131,7 +154,7 @@ const MoreInfo = () => {
                   <div key={item?._id} className="col-md-3  ">
                     <div className="card h-100">
                       <img
-                        src={`${item?.picture?.secure_url}`}
+                        src={`${item?.picture[0]?.secure_url}`}
                         className=" card-img-top"
                         width={200}
                         height={200}

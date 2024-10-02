@@ -12,10 +12,10 @@ const ProductInput = ({ getProducts }) => {
     category: "",
     price: "",
     quantity: "",
-    picture: "",
+    picture: '',
     shipping: 0,
   });
-
+console.log(inputVal);
   let { token, category } = useAuth();
   let inputHandle = (e) => {
     let { name, value } = e.target;
@@ -27,7 +27,9 @@ const ProductInput = ({ getProducts }) => {
     e.preventDefault();
 
     let formdata = new FormData();
-    formdata.append("picture", inputVal.picture, inputVal.picture?.name);
+    // formdata.append("picture", inputVal.picture, inputVal.picture?.name);
+    inputVal.picture.length && inputVal.picture.map((item) => formdata.append("picture", item));
+
     formdata.append("name", inputVal.name);
     formdata.append("description", inputVal.description);
     formdata.append("category", inputVal.category);
@@ -70,6 +72,53 @@ const ProductInput = ({ getProducts }) => {
       console.log({ msg: "error from create product", error });
     }
   };
+  // let productSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   let formdata = new FormData();
+  //   formdata.append("picture", inputVal.picture, inputVal.picture?.name);
+  //   formdata.append("name", inputVal.name);
+  //   formdata.append("description", inputVal.description);
+  //   formdata.append("category", inputVal.category);
+  //   formdata.append("price", inputVal.price);
+  //   formdata.append("quantity", inputVal.quantity);
+  //   formdata.append("shipping", inputVal.shipping);
+  //   try {
+  //     setLoading(true);
+
+  //     let { data } = await axios.post(
+  //       `${import.meta.env.VITE_BASE_URL}/products/create-product`,
+  //       formdata,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     setLoading(false);
+  //     if (data.success) {
+  //       toast.success(data.msg);
+  //       setInputVal({
+  //         name: "",
+  //         description: "",
+  //         category: inputVal.category,
+  //         price: "",
+  //         quantity: "",
+  //         picture: inputVal.picture,
+  //         shipping: 0,
+  //       });
+  //       setLoading(false);
+  //       // window.location.reload();
+  //       getProducts()
+  //     } else {
+  //       toast.error(data.msg);
+  //     }
+  //   } catch (error) {
+  //     alert("error from product create, refresh, check file type and size");
+  //     console.log({ msg: "error from create product", error });
+  //   }
+  // };
 
   //=============================================================
   return (
@@ -202,14 +251,17 @@ const ProductInput = ({ getProducts }) => {
                     type="file"
                     name="picture"
                     accept="image/*"
+                    multiple
+                    required
                     onChange={(e) => {
                       inputHandle({
-                        target: { name: "picture", value: e.target.files[0] },
+                        target: { name: "picture", value: [...e.target.files] },
+                        // target: { name: "picture", value: e.target.files[0] },
                       });
                     }}
                   />
                 </div>
-                <div className="mb-4 ms-2">
+                {/* <div className="mb-4 ms-2">
                   {inputVal.picture && (
                     <div>
                       <img
@@ -220,7 +272,7 @@ const ProductInput = ({ getProducts }) => {
                       />
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 <textarea
                   onChange={inputHandle}

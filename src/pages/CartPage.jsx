@@ -81,7 +81,7 @@ export const CartPage = () => {
                   <div key={i} className="row border p-1 mb-2">
                     <div className=" col-md-4 ">
                       <img
-                        src={`${item?.picture?.secure_url}`}
+                        src={`${item?.picture[0]?.secure_url}`}
                         className=" w-100"
                         height={200}
                         alt="image"

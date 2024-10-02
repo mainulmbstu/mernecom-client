@@ -202,7 +202,7 @@ const CreateProduct = () => {
                               <td>{index + 1}</td>
                               <td>
                                 <img
-                                  src={`${item?.picture?.secure_url}`}
+                                  src={`${item?.picture[0]?.secure_url}`}
                                   alt=""
                                   width="30"
                                 />

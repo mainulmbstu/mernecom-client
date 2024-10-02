@@ -242,7 +242,7 @@ const Home = () => {
                     <div key={item?._id} className="col-md-3  ">
                       <div className="card h-100">
                         <LazyLoadImage
-                          src={`${item?.picture?.secure_url}`}
+                          src={`${item?.picture[0]?.secure_url}`}
                           className=" "
                           height={200}
                           alt="image"
