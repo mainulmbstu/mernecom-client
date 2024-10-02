@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useSearch } from "../context/SearchContext";
 import Layout from "./Layout";
 import Loading from "./Loading";
-import ReactImageMagnify from "react-image-magnify";
+// import ReactImageMagnify from "react-image-magnify";
 
 const MoreInfo = () => {
   const [moreInfo, setMoreInfo] = useState("");
@@ -55,7 +55,7 @@ const MoreInfo = () => {
   };
   useEffect(() => {
     if (moreInfo.length < 1) return;
-    getSimilarProducts()
+    getSimilarProducts();
   }, [moreInfo]);
 
   return (
@@ -66,8 +66,11 @@ const MoreInfo = () => {
             <h1 className=" text-center">Details of product</h1>
             <hr />
             {loading && <Loading />}
-            <div className=" col-md-6 pb-3 d-flex justify-content-center ">
-              <div>
+            <div className=" col-md-6 pb-3 d-flex  justify-content-center ">
+
+                 <img src={`${moreInfo?.picture?.secure_url}`} alt="image" width={400} height={500} className="px-3" />
+
+              {/* <div>
                 <ReactImageMagnify
                   {...{
                     smallImage: {
@@ -88,7 +91,7 @@ const MoreInfo = () => {
                     },
                   }}
                 />
-              </div>
+              </div> */}
             </div>
             <div className=" col-md-6 d-flex flex-column">
               <div>
