@@ -101,5 +101,7 @@ img{
   width: 200px;
 } */
 
-
+.myImg{
+  border: 1px solid red;
+}
 

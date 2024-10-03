@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useSearch } from "../context/SearchContext";
 import Layout from "./Layout";
@@ -12,8 +12,7 @@ const MoreInfo = () => {
   let params = useParams();
   let { cart, setCart } = useSearch();
   const [loading, setLoading] = useState(false);
-  const [img, setImg] = useState("");
-  console.log(moreInfo, img);
+  const [img, setImg] = useState([]);
   //=================================
   let getMoreInfo = async () => {
     try {
@@ -28,12 +27,14 @@ const MoreInfo = () => {
       let data = await res.json();
       setMoreInfo(data.products);
       setImg(data.products[0]?.picture[0]?.secure_url);
+      // window.location.reload()
     } catch (error) {
       console.log(error);
+
     }
   };
+  
   useEffect(() => {
-    // if (!moreInfo) return;
     getMoreInfo();
   }, [params]);
   //=============================================
@@ -57,9 +58,31 @@ const MoreInfo = () => {
     }
   };
   useEffect(() => {
-    // if (moreInfo.length < 1) return;
+    if (moreInfo.length < 1) return;
     getSimilarProducts();
   }, [moreInfo]);
+
+
+  let [test, settest]=useState([])
+
+  let addrefs = useCallback(
+    (el) => {
+        settest((prev) => [...prev, el]);
+
+    },[])
+ 
+  let mouseOverHandle = (item, i) => {
+    setImg(item.secure_url)
+     test[i]?.classList.add("myImg");
+    for (let k = 0; k < test.length; k++) {
+       if (k !== i) {
+         test[k]?.classList.remove("myImg");
+       }
+      
+     }
+  }
+
+
 
   return (
     <Layout title={"More Information"}>
@@ -69,54 +92,59 @@ const MoreInfo = () => {
             <h1 className=" text-center">Details of product</h1>
             <hr />
             {loading && <Loading />}
-            <div className=" col-md-3 pb-3 ">
-              {moreInfo[0]?.picture?.map((item, i) => {
-                return (
-                  <div className="text-center py-1" key={i}>
-                    <img
-                      onMouseOver={() => setImg(item.secure_url)}
-                      style={{ cursor: "pointer" }}
-                      src={`${item?.secure_url}`}
-                      alt="img"
-                      width={100}
-                      height={100}
-                      className="px-3"
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            <div className=" col-md-4 pb-3 d-flex  justify-content-center ">
-              <img
-                src={img}
-                alt="image"
-                width={400}
-                height={500}
-                className="px-3"
-              />
-
-              {/* <div>
-                <ReactImageMagnify
-                  {...{
-                    smallImage: {
-                      alt: "Product image",
-                      // isFluidWidth: true,
-                      src: `${moreInfo?.picture?.secure_url}`,
-                      width: 300,
-                      height: 400,
-                    },
-                    largeImage: {
-                      src: `${moreInfo?.picture?.secure_url}`,
-                      width: 1200,
-                      height: 1800,
-                    },
-                    enlargedImageContainerDimensions: {
-                      width: '300%',
-                      height: '100%',
-                    },
-                  }}
+            <div className="col-md-7 row">
+              <div className=" col-md-4 pb-3 order-sm-2 order-md-1 d-sm-flex d-lg-block flex-wrap">
+                {moreInfo[0]?.picture?.map((item, i) => {
+                  return (
+                    <div className={`text-center  py-1`} key={i}>
+                      <img
+                        onMouseOver={() => {
+                          mouseOverHandle(item, i);
+                        }}
+                        ref={addrefs}
+                        style={{ cursor: "pointer" }}
+                        src={`${item?.secure_url}`}
+                        alt="img"
+                        width={100}
+                        height={100}
+                        className={`px-3 ${i === 0 ? "myImg" : ""}`}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <div className=" col-md-8 pb-3 d-flex  justify-content-center order-sm-1 order-md-2">
+                <img
+                  src={img}
+                  alt="image"
+                  width={400}
+                  height={500}
+                  className="px-3"
                 />
-              </div> */}
+  
+                {/* <div>
+                  <ReactImageMagnify
+                    {...{
+                      smallImage: {
+                        alt: "Product image",
+                        // isFluidWidth: true,
+                        src: `${moreInfo?.picture?.secure_url}`,
+                        width: 300,
+                        height: 400,
+                      },
+                      largeImage: {
+                        src: `${moreInfo?.picture?.secure_url}`,
+                        width: 1200,
+                        height: 1800,
+                      },
+                      enlargedImageContainerDimensions: {
+                        width: '300%',
+                        height: '100%',
+                      },
+                    }}
+                  />
+                </div> */}
+              </div>
             </div>
             <div className=" col-md-5 px-md-5">
               <div>
