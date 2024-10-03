@@ -93,7 +93,7 @@ const MoreInfo = () => {
             <hr />
             {loading && <Loading />}
             <div className="col-md-7 row">
-              <div className=" col-md-4 pb-3 order-sm-2 order-md-1 d-sm-flex d-lg-block flex-wrap">
+              <div className=" col-md-4 pb-3 order-2 order-md-1 d-flex d-lg-block flex-wrap">
                 {moreInfo[0]?.picture?.map((item, i) => {
                   return (
                     <div className={`text-center  py-1`} key={i}>
@@ -113,7 +113,7 @@ const MoreInfo = () => {
                   );
                 })}
               </div>
-              <div className=" col-md-8 pb-3 d-flex  justify-content-center order-sm-1 order-md-2">
+              <div className=" col-md-8 pb-3 d-flex  justify-content-center order-1 order-md-2">
                 <img
                   src={img}
                   alt="image"
