@@ -27,7 +27,7 @@ const SearchResults = () => {
                 <div key={item?._id} className="col-md-3  ">
                   <div className="card h-100">
                     <img
-                      src={`${item?.picture?.secure_url}`}
+                      src={`${item?.picture[0]?.secure_url}`}
                       className=" card-img-top"
                       alt="image"
                       height={200}
