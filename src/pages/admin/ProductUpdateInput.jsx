@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Layout from "../../components/Layout";
 
+// eslint-disable-next-line react/prop-types
 const ProductUpdateInput = ({ value }) => {
   let [trix, setTrix] = useState(true);
   const [inputVal, setInputVal] = useState({
@@ -12,10 +13,11 @@ const ProductUpdateInput = ({ value }) => {
     category: "",
     price: "",
     quantity: "",
-    picture: "",
+    picture: [],
     shipping: "",
   });
   let { token, category, loading, setLoading } = useAuth();
+  // eslint-disable-next-line react/prop-types
   let { editProduct, getProducts, setEditProduct } = value;
 
   if (editProduct?.name && trix) {
@@ -40,8 +42,9 @@ const ProductUpdateInput = ({ value }) => {
     e.preventDefault();
 
     let formdata = new FormData();
-    inputVal?.picture &&
-      formdata.append("picture", inputVal?.picture, inputVal?.picture?.name);
+    inputVal?.picture?.length &&
+      inputVal.picture.length &&
+      inputVal.picture.map((item) => formdata.append("picture", item));
     formdata.append("name", inputVal.name);
     formdata.append("description", inputVal.description);
     formdata.append("category", inputVal.category);
@@ -52,6 +55,7 @@ const ProductUpdateInput = ({ value }) => {
       setLoading(true);
 
       let { data } = await axios.post(
+        // eslint-disable-next-line react/prop-types
         `${import.meta.env.VITE_BASE_URL}/products/update-product/${editProduct?._id}`,
         formdata,
         {
@@ -74,6 +78,44 @@ const ProductUpdateInput = ({ value }) => {
       console.log({ msg: "update product", error });
     }
   };
+  // let productSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   let formdata = new FormData();
+  //   inputVal?.picture &&
+  //     formdata.append("picture", inputVal?.picture, inputVal?.picture?.name);
+  //   formdata.append("name", inputVal.name);
+  //   formdata.append("description", inputVal.description);
+  //   formdata.append("category", inputVal.category);
+  //   formdata.append("price", inputVal.price);
+  //   formdata.append("quantity", inputVal.quantity);
+  //   formdata.append("shipping", inputVal.shipping);
+  //   try {
+  //     setLoading(true);
+
+  //     let { data } = await axios.post(
+  //       `${import.meta.env.VITE_BASE_URL}/products/update-product/${editProduct?._id}`,
+  //       formdata,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     if (data.success) {
+  //       toast.success(data.msg);
+  //       setTrix(true);
+  //       setEditProduct("");
+  //      getProducts();
+  //       setLoading(false);
+  //     } else {
+  //       toast.error(data.msg);
+  //     }
+  //   } catch (error) {
+  //     console.log({ msg: "update product", error });
+  //   }
+  // };
 
   return (
     <Layout title={"Product list"}>
@@ -105,6 +147,7 @@ const ProductUpdateInput = ({ value }) => {
                     className="form-control"
                     list="categoryList"
                     type={"text"}
+                    // eslint-disable-next-line react/prop-types
                     placeholder={editProduct?.category?.name}
                     onChange={(e) => {
                       let cat = category.filter(
@@ -173,19 +216,21 @@ const ProductUpdateInput = ({ value }) => {
                     type="file"
                     name="picture"
                     accept="image/*"
+                    multiple
                     onChange={(e) => {
                       inputHandle({
-                        target: { name: "picture", value: e.target.files[0] },
+                        target: { name: "picture", value: [...e.target.files] },
+                        // target: { name: "picture", value: e.target.files[0] },
                       });
                     }}
                   />
                 </div>
                 <div className="mb-4 ms-2 d-flex justify-content-evenly">
-                  {inputVal.picture && (
+                  {inputVal.picture.length && (
                     <div>
                       <p>New uploaded</p>
                       <img
-                        src={URL.createObjectURL(inputVal.picture)}
+                        src={URL.createObjectURL(inputVal?.picture[0])}
                         alt="image"
                         className="img img-responsive"
                         height={"100px"}
@@ -196,7 +241,8 @@ const ProductUpdateInput = ({ value }) => {
                   <div>
                     <p>Current Image</p>
                     <img
-                      src={editProduct?.picture?.secure_url}
+                      // eslint-disable-next-line react/prop-types
+                      src={editProduct?.picture?.length && editProduct?.picture[0]?.secure_url}
                       alt="image"
                       className="img img-responsive"
                       height={"100px"}

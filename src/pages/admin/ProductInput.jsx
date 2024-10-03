@@ -15,7 +15,7 @@ const ProductInput = ({ getProducts }) => {
     picture: '',
     shipping: 0,
   });
-console.log(inputVal);
+
   let { token, category } = useAuth();
   let inputHandle = (e) => {
     let { name, value } = e.target;
@@ -27,7 +27,7 @@ console.log(inputVal);
     e.preventDefault();
 
     let formdata = new FormData();
-    // formdata.append("picture", inputVal.picture, inputVal.picture?.name);
+
     inputVal.picture.length && inputVal.picture.map((item) => formdata.append("picture", item));
 
     formdata.append("name", inputVal.name);

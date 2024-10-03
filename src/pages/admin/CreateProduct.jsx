@@ -18,7 +18,6 @@ const CreateProduct = () => {
   let [page, setPage] = useState(1);
   let [total, setTotal] = useState(0);
   let [products, setProducts] = useState([]);
-  
   let getProducts = async (page = 1) => {
     page === 1 && window.scrollTo(0, 0);
     try {
@@ -28,7 +27,7 @@ const CreateProduct = () => {
         {
           params: {
             page: page,
-            size: 10,
+            size: 1,
           },
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -97,7 +96,7 @@ const CreateProduct = () => {
     if (res.ok) {
       toast.success(`${delItem?.name} is deleted successfully`);
       setLoading(false);
-      window.location.reload()
+      getProducts()
     } else {
       toast.success(data?.msg);
     }
@@ -215,6 +214,7 @@ const CreateProduct = () => {
                               <td>
                                 <button
                                   onClick={() => {
+                                    setPage(1)
                                     setDelItem(item);
                                   }}
                                   className="btn btn-danger"
@@ -258,7 +258,10 @@ const CreateProduct = () => {
                                 ) : (
                                   <>
                                     <button
-                                      onClick={() => setEditProduct(item)}
+                                        onClick={() => {
+                                          setPage(1)
+                                          setEditProduct(item)
+                                        }}
                                       className="btn btn-primary"
                                       data-bs-toggle="modal"
                                       data-bs-target="#editProduct"
