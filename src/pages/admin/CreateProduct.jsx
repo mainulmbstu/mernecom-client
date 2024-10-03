@@ -27,7 +27,7 @@ const CreateProduct = () => {
         {
           params: {
             page: page,
-            size: 1,
+            size: 10,
           },
           headers: { Authorization: `Bearer ${token}` },
         }
