@@ -3,11 +3,11 @@
   padding: 0;
   box-sizing: border-box;
 }
-p{
+p {
   margin: 0;
 }
 
-img{
+img {
   object-fit: contain;
   margin-top: 5px;
 }
@@ -16,12 +16,13 @@ img{
   /* max-width: 1280px; */
   margin: 0;
   padding: 0;
-  
-    background: linear-gradient(
+
+  background: linear-gradient(
     to bottom,
     rgb(184, 174, 231),
     rgb(241, 239, 245)
-  )}
+  );
+}
 
 .active {
   color: rgb(233, 21, 21) !important;
@@ -79,12 +80,12 @@ img{
   );
 }
 
-.position-absolute{
-  right:0;
+.position-absolute {
+  right: 0;
   top: 4px;
 }
 
-.hero-area{
+.hero-area {
   background-color: black;
   height: 200px;
   display: flex;
@@ -92,35 +93,30 @@ img{
   font-size: larger;
 }
 
-.hero-area h1{
+.hero-area h1 {
   font-size: 50px;
 }
-  
+
 /* img{
   height:200px;
   width: 200px;
 } */
 
-.myImg{
+.myImg {
   border: 1px solid red;
 }
 
-.dim::before{
-  content: '';
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.753);
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0.3;
+.dim::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  /* background-color: rgba(0, 0, 0, 0.753); */
+  background-image: url(../public/loading-black2.gif);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.8;
 }
-
-
-
-
-
-
-
-
-
