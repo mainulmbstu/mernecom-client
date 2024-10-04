@@ -74,7 +74,7 @@ const Gallery = () => {
        toast.error(data.msg);
      }
    } catch (error) {
-     alert("error from gallery create, refresh, check file type and size");
+     alert("error from gallery create, refresh, check file type and size")
      console.log({ msg: "error from create gallery", error });
    }
  };
