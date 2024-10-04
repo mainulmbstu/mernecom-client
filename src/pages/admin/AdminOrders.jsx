@@ -136,7 +136,7 @@ const AdminOrders = () => {
   //===============================================================
   return (
     <Layout title={"Admin orders"}>
-      <div className={loading && 'dim2'}>
+      <div className={loading && 'dim'}>
         <div className="row ">
           {/* <h1>{[...Array(adminOrders.length/2)].map((_, i) => {
             return <span>{i+1} </span>

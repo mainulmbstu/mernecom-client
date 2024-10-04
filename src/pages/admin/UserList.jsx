@@ -117,7 +117,7 @@ const UserList = () => {
 
   return (
     <Layout title={"User list"}>
-      <div className={loading && 'dim3'}>
+      <div className={loading && 'dim'}>
         <div className="row ">
           <div className="col-md-3 p-2">
             <div className="card p-2">
