@@ -105,216 +105,218 @@ const CreateProduct = () => {
 
   return (
     <Layout title={"Products"}>
-      <div className="row ">
-        <div className="col-md-3 p-2">
-          <div className="card p-2">
-            <AdminMenu />
+      <div className={loading && 'dim4'}>
+        <div className="row ">
+          <div className="col-md-3 p-2">
+            <div className="card p-2">
+              <AdminMenu />
+            </div>
           </div>
-        </div>
-        <div className=" col-md-9 p-2">
-          <div className=" card p-2">
-            <div className="">
-              <div className=" d-flex justify-content-between mb-3">
-                <h3>
-                  Product List ({products?.length} of {total}){" "}
-                </h3>
-
-                <div>
-                  <button
-                    onClick={()=>setPage(1)}
-                    type="button"
-                    className="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#createProduct"
-                  >
-                    Create Product
-                  </button>
-                  <CreateProductModal getProducts={getProducts} />
-                </div>
-              </div>
-
-              <div className=" d-flex my-2">
-                <div className="col-md-4">
-                  <form
-                    className="d-flex"
-                    role="search"
-                    onSubmit={getSearchAdminProducts}
-                  >
-                    <input
-                      className="form-control me-2"
-                      type="search"
-                      placeholder="Product Name"
-                      aria-label="Search"
-                      value={searchVal}
-                      onChange={(e) => setSearchVal(e.target.value)}
-                    />
+          <div className=" col-md-9 p-2">
+            <div className=" card p-2">
+              <div className="">
+                <div className=" d-flex justify-content-between mb-3">
+                  <h3>
+                    Product List ({products?.length} of {total}){" "}
+                  </h3>
+  
+                  <div>
                     <button
-                      className="btn btn-success btn-outline-black"
-                      type="submit"
+                      onClick={()=>setPage(1)}
+                      type="button"
+                      className="btn btn-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#createProduct"
                     >
-                      Search
+                      Create Product
                     </button>
-                  </form>
+                    <CreateProductModal getProducts={getProducts} />
+                  </div>
                 </div>
-              </div>
-
-              <div className=" border">
-                {loading && <Loading />}
-                <InfiniteScroll
-                  dataLength={products.length}
-                  next={
-                    !searchVal
-                      ? () => {
-                        setPage(page + 1);
-                        getProducts(page + 1)
-                      }
-                      : (e) => {
-                        setPage(page + 1);
-                          getSearchAdminProducts(e, page + 1);
+  
+                <div className=" d-flex my-2">
+                  <div className="col-md-4">
+                    <form
+                      className="d-flex"
+                      role="search"
+                      onSubmit={getSearchAdminProducts}
+                    >
+                      <input
+                        className="form-control me-2"
+                        type="search"
+                        placeholder="Product Name"
+                        aria-label="Search"
+                        value={searchVal}
+                        onChange={(e) => setSearchVal(e.target.value)}
+                      />
+                      <button
+                        className="btn btn-success btn-outline-black"
+                        type="submit"
+                      >
+                        Search
+                      </button>
+                    </form>
+                  </div>
+                </div>
+  
+                <div className=" border">
+                  {/* {loading && <Loading />} */}
+                  <InfiniteScroll
+                    dataLength={products.length}
+                    next={
+                      !searchVal
+                        ? () => {
+                          setPage(page + 1);
+                          getProducts(page + 1)
                         }
-                  }
-                  hasMore={products.length < total}
-                  loader={<h1>Loading...</h1>}
-                  endMessage={
-                    <h4 className=" text-center">All items loaded</h4>
-                  }
-                >
-                  <table className="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">SL</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Delete</th>
-                        <th scope="col">Update</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      {products?.length &&
-                        products.map((item, index) => {
-                          return (
-                            <tr key={item._id}>
-                              <td>{index + 1}</td>
-                              <td>
-                                <img
-                                  src={`${item?.picture[0]?.secure_url}`}
-                                  alt=""
-                                  width="30"
-                                />
-                              </td>
-                              <td>{item.name}</td>
-                              <td>{item.category?.name}</td>
-                              <td>{item.price}</td>
-                              <td>{item.quantity}</td>
-                              {/* <td>{"edit/update"}</td> */}
-                              <td>
-                                <button
-                                  onClick={() => {
-                                    setPage(1)
-                                    setDelItem(item);
-                                  }}
-                                  className="btn btn-danger"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#deleteCategory"
-                                  disabled={loading}
-                                >
-                                  {loading && item._id === delItem._id ? (
+                        : (e) => {
+                          setPage(page + 1);
+                            getSearchAdminProducts(e, page + 1);
+                          }
+                    }
+                    hasMore={products.length < total}
+                    loader={<h1>Loading...</h1>}
+                    endMessage={
+                      <h4 className=" text-center">All items loaded</h4>
+                    }
+                  >
+                    <table className="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">SL</th>
+                          <th scope="col">Image</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Category</th>
+                          <th scope="col">Price</th>
+                          <th scope="col">Quantity</th>
+                          <th scope="col">Delete</th>
+                          <th scope="col">Update</th>
+                        </tr>
+                      </thead>
+  
+                      <tbody>
+                        {products?.length &&
+                          products.map((item, index) => {
+                            return (
+                              <tr key={item._id}>
+                                <td>{index + 1}</td>
+                                <td>
+                                  <img
+                                    src={`${item?.picture[0]?.secure_url}`}
+                                    alt=""
+                                    width="30"
+                                  />
+                                </td>
+                                <td>{item.name}</td>
+                                <td>{item.category?.name}</td>
+                                <td>{item.price}</td>
+                                <td>{item.quantity}</td>
+                                {/* <td>{"edit/update"}</td> */}
+                                <td>
+                                  <button
+                                    onClick={() => {
+                                      setPage(1)
+                                      setDelItem(item);
+                                    }}
+                                    className="btn btn-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteCategory"
+                                    disabled={loading}
+                                  >
+                                    {loading && item._id === delItem._id ? (
+                                      <>
+                                        <div
+                                          className="spinner-border text-primary"
+                                          role="status"
+                                          disabled
+                                        >
+                                          <span className="visually-hidden">
+                                            Loading...
+                                          </span>
+                                        </div>
+                                      </>
+                                    ) : (
+                                      <>Delete</>
+                                    )}
+                                  </button>
+                                </td>
+                                <td>
+                                  {loading && item._id === editProduct._id ? (
                                     <>
-                                      <div
-                                        className="spinner-border text-primary"
-                                        role="status"
+                                      <button
+                                        className="btn btn-primary"
+                                        type="button"
                                         disabled
                                       >
-                                        <span className="visually-hidden">
-                                          Loading...
-                                        </span>
-                                      </div>
+                                        <span
+                                          className="spinner-border spinner-border-sm"
+                                          role="status"
+                                          aria-hidden="true"
+                                        />
+                                        Updating...
+                                      </button>
                                     </>
                                   ) : (
-                                    <>Delete</>
+                                    <>
+                                      <button
+                                          onClick={() => {
+                                            setPage(1)
+                                            setEditProduct(item)
+                                          }}
+                                        className="btn btn-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editProduct"
+                                        disabled={loading}
+                                        >
+                                          Details & Edit
+                                          
+                                      </button>
+                                    </>
                                   )}
-                                </button>
-                              </td>
-                              <td>
-                                {loading && item._id === editProduct._id ? (
-                                  <>
-                                    <button
-                                      className="btn btn-primary"
-                                      type="button"
-                                      disabled
-                                    >
-                                      <span
-                                        className="spinner-border spinner-border-sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                      />
-                                      Updating...
-                                    </button>
-                                  </>
-                                ) : (
-                                  <>
-                                    <button
-                                        onClick={() => {
-                                          setPage(1)
-                                          setEditProduct(item)
-                                        }}
-                                      className="btn btn-primary"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#editProduct"
-                                      disabled={loading}
-                                      >
-                                        Details & Edit
-                                        
-                                    </button>
-                                  </>
-                                )}
-                              </td>
-                              <UpdateProductModal
-                                value={{
-                                  editProduct,
-                                  getProducts,
-                                  setEditProduct,
-                                }}
-                              />
-                            </tr>
-                          );
-                        })}
-                    </tbody>
-                  </table>
-                </InfiniteScroll>
-                <DeleteModal value={{ func: deleteItem, item: delItem }} />
+                                </td>
+                                <UpdateProductModal
+                                  value={{
+                                    editProduct,
+                                    getProducts,
+                                    setEditProduct,
+                                  }}
+                                />
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </InfiniteScroll>
+                  <DeleteModal value={{ func: deleteItem, item: delItem }} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="d-flex">
-          {products?.length < total ? (
-            <>
-              <button
-                onClick={
-                  !searchVal
-                    ? () => {
-                      setPage(page + 1)
-                      getProducts(page + 1)
-                    }
-                    : (e) => {
-                        setPage(page + 1);
-                        getSearchAdminProducts(e, page + 1);
+          <div className="d-flex">
+            {products?.length < total ? (
+              <>
+                <button
+                  onClick={
+                    !searchVal
+                      ? () => {
+                        setPage(page + 1)
+                        getProducts(page + 1)
                       }
-                }
-                className="btn btn-primary my-3 px-3 mx-auto"
-                disabled={loading}
-              >
-                {loading ? "Loading..." : "Load More"}
-              </button>
-            </>
-          ) : (
-            ""
-          )}
+                      : (e) => {
+                          setPage(page + 1);
+                          getSearchAdminProducts(e, page + 1);
+                        }
+                  }
+                  className="btn btn-primary my-3 px-3 mx-auto"
+                  disabled={loading}
+                >
+                  {loading ? "Loading..." : "Load More"}
+                </button>
+              </>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
       </div>
     </Layout>
