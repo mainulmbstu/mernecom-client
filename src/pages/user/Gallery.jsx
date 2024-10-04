@@ -81,9 +81,6 @@ const Gallery = () => {
 
   return (
     <Layout title="Gallery">
-      <div>
-        <img src="frame.png" alt="" />
-      </div>
       {loading && <Loading />}
       {userInfo?.role && (
         <div className="px-2 my-4">
