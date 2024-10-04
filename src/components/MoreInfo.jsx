@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSearch } from "../context/SearchContext";
 import Layout from "./Layout";
@@ -9,7 +9,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import LoadingModal from "./LoadingModal";
 
 const MoreInfo = () => {
-  const [moreInfo, setMoreInfo] = useState('');
+  const [moreInfo, setMoreInfo] = useState("");
   const [similarProducts, setSimilarProducts] = useState([]);
   let params = useParams();
   let { cart, setCart } = useSearch();
@@ -32,10 +32,9 @@ const MoreInfo = () => {
       // window.location.reload()
     } catch (error) {
       console.log(error);
-
     }
   };
-  
+
   useEffect(() => {
     getMoreInfo();
   }, [params]);
@@ -62,31 +61,25 @@ const MoreInfo = () => {
     getSimilarProducts();
   }, [moreInfo]);
 
+  let [test, settest] = useState([]);
 
-  let [test, settest]=useState([])
+  let addrefs = useCallback((el) => {
+    settest((prev) => [...prev, el]);
+  }, []);
 
-  let addrefs = useCallback(
-    (el) => {
-        settest((prev) => [...prev, el]);
-
-    },[])
- 
   let mouseOverHandle = (item, i) => {
-    setImg(item.secure_url)
-     test[i]?.classList.add("myImg");
+    setImg(item.secure_url);
+    test[i]?.classList.add("myImg");
     for (let k = 0; k < test.length; k++) {
-       if (k !== i) {
-         test[k]?.classList.remove("myImg");
-       }
-      
-     }
-  }
-
-
+      if (k !== i) {
+        test[k]?.classList.remove("myImg");
+      }
+    }
+  };
 
   return (
     <Layout title={"More Information"}>
-      <div className={loading && 'dim'}>
+      <div className={loading && "dim"}>
         <div className="px-2">
           <div className="row g-3">
             <div className="row g-4 border">
@@ -122,7 +115,7 @@ const MoreInfo = () => {
                     height="500"
                     className="px-3"
                   />
-  
+
                   {/* <div>
                     <ReactImageMagnify
                       {...{
@@ -209,7 +202,7 @@ const MoreInfo = () => {
                               More info
                             </button>
                           </Link>
-  
+
                           <button
                             onClick={() => {
                               setCart([...cart, item]);
@@ -229,8 +222,8 @@ const MoreInfo = () => {
                   );
                 })}
             </div>
-  
-            <button
+
+            {/* <button
               type="button"
               className="btn btn-primary"
               data-bs-toggle="modal"
@@ -238,7 +231,7 @@ const MoreInfo = () => {
             >
               Launch demo modal
             </button>
-            {loading && <LoadingModal />}
+            {loading && <LoadingModal />} */}
           </div>
         </div>
       </div>
