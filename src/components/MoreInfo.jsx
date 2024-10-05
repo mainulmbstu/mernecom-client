@@ -99,8 +99,8 @@ const MoreInfo = () => {
                           style={{ cursor: "pointer" }}
                           src={`${item?.secure_url}`}
                           alt="img"
-                          width={80}
-                          height={100}
+                          width={70}
+                          height={70}
                           className={`px-3 ${i === 0 ? "myImg" : ""}`}
                         />
                       </div>
