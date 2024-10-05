@@ -87,7 +87,7 @@ const MoreInfo = () => {
               <hr />
               {/* {loading && <Loading />} */}
               <div className="col-md-7 row">
-                <div className=" col-md-4 pb-3 order-2 order-md-1 d-flex d-lg-block flex-wrap">
+                <div className=" col-md-3 pb-3 order-2 order-md-1 d-flex d-lg-block flex-wrap">
                   {moreInfo?.picture?.map((item, i) => {
                     return (
                       <div className={`text-center  py-1`} key={i}>
@@ -99,7 +99,7 @@ const MoreInfo = () => {
                           style={{ cursor: "pointer" }}
                           src={`${item?.secure_url}`}
                           alt="img"
-                          width={100}
+                          width={80}
                           height={100}
                           className={`px-3 ${i === 0 ? "myImg" : ""}`}
                         />
@@ -107,7 +107,7 @@ const MoreInfo = () => {
                     );
                   })}
                 </div>
-                <div className=" col-md-8 pb-3 d-flex  justify-content-center order-1 order-md-2">
+                <div className=" col-md-9 pb-3 d-flex  justify-content-center order-1 order-md-2">
                   <LazyLoadImage
                     src={img}
                     alt="image"
