@@ -117,7 +117,7 @@ const UserList = () => {
 
   return (
     <Layout title={"User list"}>
-      <div className={loading && 'dim'}>
+      <div className={loading ? "dim" : ""}>
         <div className="row ">
           <div className="col-md-3 p-2">
             <div className="card p-2">
@@ -212,7 +212,7 @@ const UserList = () => {
                               <td>
                                 <button
                                   onClick={() => {
-                                    setPage(1)
+                                    setPage(1);
                                     setDelItem(item);
                                   }}
                                   className="btn btn-danger"

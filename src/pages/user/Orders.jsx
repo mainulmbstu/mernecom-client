@@ -4,7 +4,6 @@ import { useState } from "react";
 import axios from "axios";
 import moment from "moment";
 import { useAuth } from "../../context/AuthContext";
-import Loading from "../../components/Loading";
 import Layout from "./../../components/Layout";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -15,7 +14,6 @@ const Orders = () => {
   let [page, setPage] = useState(1);
   let [total, setTotal] = useState(0);
 
-  console.log(orders, total);
   let getUserOrders = async () => {
     page === 1 && window.scrollTo(0, 0);
     try {
@@ -47,7 +45,7 @@ const Orders = () => {
 
   return (
     <Layout title="User order list">
-      <div className={loading && 'dim'}>
+      <div className={loading ? "dim" : ""}>
         <div className="row ">
           <div className="col-md-3 p-2">
             <div className=" sticky-top z-0">

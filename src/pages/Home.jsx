@@ -105,7 +105,7 @@ const Home = () => {
   //===========================================
   return (
     <Layout title={"home"}>
-      <div className={loading && "dim"}>
+      <div className={loading?'dim':''}>
         <div className=" hero-area text-danger">
           <Marquee direction="left" speed={300} autofill={false} loop={""}>
             <h1>WELCOME TO DEMO ECOMMERCE WEBSITE || </h1>

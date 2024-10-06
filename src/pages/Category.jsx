@@ -44,7 +44,7 @@ let [page, setPage] = useState(1);
 
   return (
     <Layout title={`Category-${params.slug}`}>
-     <div className={loading && 'dim'}>
+      <div className={loading ? "dim" : ""}>
         <div>
           <div className="px-2">
             <h3 className=" text-capitalize">
@@ -53,17 +53,17 @@ let [page, setPage] = useState(1);
             <h3 className=" text-danger">
               {!products?.length ? "No Product Found!!" : ""}
             </h3>
-              <InfiniteScroll
-                dataLength={products.length}
-                next={() => {
-                  setPage(page + 1);
-                  getProducts(page + 1);
-                }}
-                hasMore={products.length < total}
-                loader={<h1>Loading...</h1>}
-                endMessage={<h4 className=" text-center">All items loaded</h4>}
+            <InfiniteScroll
+              dataLength={products.length}
+              next={() => {
+                setPage(page + 1);
+                getProducts(page + 1);
+              }}
+              hasMore={products.length < total}
+              loader={<h1>Loading...</h1>}
+              endMessage={<h4 className=" text-center">All items loaded</h4>}
             >
-            <div className="row g-3">
+              <div className="row g-3">
                 {products?.length &&
                   products?.map((item) => {
                     return (
@@ -108,8 +108,8 @@ let [page, setPage] = useState(1);
                       </div>
                     );
                   })}
-            </div>
-              </InfiniteScroll>
+              </div>
+            </InfiniteScroll>
             <div className="d-flex">
               {products.length < total ? (
                 <>
@@ -130,7 +130,7 @@ let [page, setPage] = useState(1);
             </div>
           </div>
         </div>
-     </div>
+      </div>
     </Layout>
   );
 }

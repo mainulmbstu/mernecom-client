@@ -79,7 +79,7 @@ const MoreInfo = () => {
 
   return (
     <Layout title={"More Information"}>
-      <div className={loading && "dim"}>
+      <div className={loading ? "dim" : ""}>
         <div className="px-2">
           <div className="row g-3">
             <div className="row g-4 border">

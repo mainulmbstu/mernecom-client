@@ -105,7 +105,7 @@ const CreateProduct = () => {
 
   return (
     <Layout title={"Products"}>
-      <div className={loading && 'dim'}>
+      <div className={loading ? "dim" : ""}>
         <div className="row ">
           <div className="col-md-3 p-2">
             <div className="card p-2">
@@ -119,10 +119,10 @@ const CreateProduct = () => {
                   <h3>
                     Product List ({products?.length} of {total}){" "}
                   </h3>
-  
+
                   <div>
                     <button
-                      onClick={()=>setPage(1)}
+                      onClick={() => setPage(1)}
                       type="button"
                       className="btn btn-primary"
                       data-bs-toggle="modal"
@@ -133,7 +133,7 @@ const CreateProduct = () => {
                     <CreateProductModal getProducts={getProducts} />
                   </div>
                 </div>
-  
+
                 <div className=" d-flex my-2">
                   <div className="col-md-4">
                     <form
@@ -158,7 +158,7 @@ const CreateProduct = () => {
                     </form>
                   </div>
                 </div>
-  
+
                 <div className=" border">
                   {/* {loading && <Loading />} */}
                   <InfiniteScroll
@@ -166,11 +166,11 @@ const CreateProduct = () => {
                     next={
                       !searchVal
                         ? () => {
-                          setPage(page + 1);
-                          getProducts(page + 1)
-                        }
+                            setPage(page + 1);
+                            getProducts(page + 1);
+                          }
                         : (e) => {
-                          setPage(page + 1);
+                            setPage(page + 1);
                             getSearchAdminProducts(e, page + 1);
                           }
                     }
@@ -193,7 +193,7 @@ const CreateProduct = () => {
                           <th scope="col">Update</th>
                         </tr>
                       </thead>
-  
+
                       <tbody>
                         {products?.length &&
                           products.map((item, index) => {
@@ -215,7 +215,7 @@ const CreateProduct = () => {
                                 <td>
                                   <button
                                     onClick={() => {
-                                      setPage(1)
+                                      setPage(1);
                                       setDelItem(item);
                                     }}
                                     className="btn btn-danger"
@@ -259,17 +259,16 @@ const CreateProduct = () => {
                                   ) : (
                                     <>
                                       <button
-                                          onClick={() => {
-                                            setPage(1)
-                                            setEditProduct(item)
-                                          }}
+                                        onClick={() => {
+                                          setPage(1);
+                                          setEditProduct(item);
+                                        }}
                                         className="btn btn-primary"
                                         data-bs-toggle="modal"
                                         data-bs-target="#editProduct"
                                         disabled={loading}
-                                        >
-                                          Details & Edit
-                                          
+                                      >
+                                        Details & Edit
                                       </button>
                                     </>
                                   )}
@@ -299,9 +298,9 @@ const CreateProduct = () => {
                   onClick={
                     !searchVal
                       ? () => {
-                        setPage(page + 1)
-                        getProducts(page + 1)
-                      }
+                          setPage(page + 1);
+                          getProducts(page + 1);
+                        }
                       : (e) => {
                           setPage(page + 1);
                           getSearchAdminProducts(e, page + 1);

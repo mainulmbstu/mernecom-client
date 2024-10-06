@@ -10,7 +10,7 @@ const SearchResults = () => {
 
   return (
     <Layout title={"Search result"}>
-      <div className={loading&&'dim'}>
+      <div className={loading ? "dim" : ""}>
         <InfiniteScroll
           dataLength={results?.length && results?.length}
           next={() => submitHandlerScroll(page)}
@@ -39,13 +39,16 @@ const SearchResults = () => {
                           <p>Price: {item?.price} </p>
                           <p>Available quantity: {item?.quantity} </p>
                           <p>
-                            Description: {item?.description?.substring(0, 8)} ....{" "}
+                            Description: {item?.description?.substring(0, 8)}{" "}
+                            ....{" "}
                           </p>
                         </div>
                       </div>
                       <div className=" d-flex justify-content-evenly">
                         <Link to={`/products/more-info/${item._id}`}>
-                          <button className="btn btn-primary ">More info</button>
+                          <button className="btn btn-primary ">
+                            More info
+                          </button>
                         </Link>
                         <button
                           onClick={() => {

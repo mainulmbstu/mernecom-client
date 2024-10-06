@@ -136,7 +136,7 @@ const AdminOrders = () => {
   //===============================================================
   return (
     <Layout title={"Admin orders"}>
-      <div className={loading && 'dim'}>
+      <div className={loading ? "dim" : ""}>
         <div className="row ">
           {/* <h1>{[...Array(adminOrders.length/2)].map((_, i) => {
             return <span>{i+1} </span>
@@ -213,7 +213,9 @@ const AdminOrders = () => {
                                 <Select
                                   variant={false}
                                   defaultValue={item?.status}
-                                  onChange={(val) => statusHandle(item._id, val)}
+                                  onChange={(val) =>
+                                    statusHandle(item._id, val)
+                                  }
                                 >
                                   {status.map((st, i) => (
                                     <Option key={i} value={st}>
@@ -222,7 +224,7 @@ const AdminOrders = () => {
                                   ))}
                                 </Select>
                               </td>
-  
+
                               <td>{item?.user?.email} </td>
                               <td>{item?.user?.address} </td>
                               <td>
